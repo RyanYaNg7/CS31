@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/4/faq.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:03 GMT -->
+<head>
+ <title>CS 31 Project 4 FAQ, Fall 2017</title>
+</head>
+<body>
+<div align="right">
+Fall 2017 CS 31 
+</div>
+<div align="center">
+<h2>Project 4 FAQ</h2>
+</div>
+<ol>
+<li>
+<p>
+<strong>
+I don't know where to begin.  What can I do?
+</strong>
+</p>
+<p>
+Throw away a mindset that says you have to figure out how all the functions
+will work before you type in any code.  Start with one function and get
+that working &mdash; that will clear up a lot of misconceptions you may have.
+</p>
+<p>
+If you're <em>really</em> stuck, start with this program that solves a
+problem that is different, but related, and mutate it into what you want:  
+</p>
+<pre>
+        #include &lt;iostream>
+        #include &lt;string>
+        #include &lt;cassert>
+        using namespace std;
+
+          // Return the position of the first element that is not &lt;= the one
+	  // that follows it.  Return &minus;1 if there are no such elements.
+        int findFirstDisorder(const string a[], int n)
+        {
+            for (int k = 0; k &lt; n-1; k++)
+	        if (a[k] > a[k+1])
+		    return k;
+            return -1;
+        }
+
+        int main()
+        {
+            string h[5] = { "clark", "diana", "tony", "selina", "peter" };
+            assert(findFirstDisorder(h, 5) == 2);
+            assert(findFirstDisorder(h, 4) == 2);
+            assert(findFirstDisorder(h, 3) == -1);
+            assert(findFirstDisorder(h, 2) == -1);
+            assert(findFirstDisorder(h, 1) == -1);
+            assert(findFirstDisorder(h, 0) == -1); // No disorder in empty array
+              // There should be another test that passes a bad argument
+            cout &lt;&lt; "All tests succeeded" &lt;&lt; endl;
+        }
+</pre>
+</li>
+<li>
+<p>
+<strong>
+I get apparently random results when I try to run some little tests of
+the comparison operators on strings.  For example, a test like
+<code>"abcde" &lt; "abcxyz"</code> sometimes returns false.  What's going on?
+</strong>
+</p>
+<p>
+To get meaningful results, make sure that at least one of the two objects
+you are comparing are declared to be of the string type, like <code>s</code>,
+<code>t</code>, <code>a[0]</code>, and <code>a[1]</code> below:
+</p>
+<pre>
+string s = "hello";
+string t = "help";
+string a[2] = { "helping", "hello" };
+</pre>
+The following are all true:
+<pre>
+        s &lt; t           // The h's, e's, and first l's match, but s has
+                        // an 'l' where t has a 'p', and 'l' &lt; 'p'.
+        s &lt; "help"      // True for the same reason.
+        t &lt; a[0]        // The first four characters match, then t runs
+                        // out while a[0] has more.
+        "help" &lt; a[0]   // True for the same reason.
+        s == a[1]       // All 5 characters match, and both strings end at
+                        // the same time.
+        s == "hello"    // True for the same reason
+</pre>
+<p>
+What you cannot do predictably is compare two character string
+literals:  <code>"hello" &lt; "help"</code> may be true or false.
+A test like this unfortunately will compile.  For technical reasons, what
+are being compared are not the characters in the literals, but the addresses
+at which the literals are stored, so the result depends on where the
+compiler chooses to place the two.
+</p>
+</li>
+<li>
+<p>
+<strong>
+Blah blah blah if it's equal to the empty string?
+</strong>
+</p>
+<p>
+There is absolutely nothing in the spec that specially distinguishes the empty
+string (i.e., the string <code>""</code>).  For example, <code>lookup</code>
+doesn't treat the empty string as an error.  The empty string is just
+another string, no more special than <code>"clark"</code> or
+<code>"bruce"</code>.
+</p>
+</li>
+<li>
+<p>
+<strong>
+What should my functions do if n equals 0?
+</strong>
+</p>
+<p>
+The spec says: <em>Unless otherwise noted, passing 0 to the function as the
+array size is not itself an error; it merely indicates the function should
+examine no elements of the array.</em>  So do what makes sense.  For example,
+appending something to all <code>n</code> elements of an array when
+<code>n</code> is 0 does nothing, because the function will deal with no
+elements; that's not an error.  If asked to rotateLeft an element from an
+array with no elements of interest, that's as much an error as being asked
+to rotateLeft the element at position 8 in a 5-element array, because in
+both cases there is no element that the function knows about at the
+indicated position, so the function would return &minus;1.  The spec tells
+you that the empty sequence is a subsequence of every sequence (even an
+empty one), at position 0.
+</p>
+</li>
+</ol>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/4/faq.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:03 GMT -->
+</html>

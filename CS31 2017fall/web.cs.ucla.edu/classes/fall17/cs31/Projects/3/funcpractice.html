@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/3/funcpractice.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:25 GMT -->
+<head>
+ <title>CS 31 Project 3 Function Practice, Fall 2017</title>
+</head>
+<body>
+<div align="right">
+Fall 2017 CS 31 
+</div>
+<div align="center">
+<h2>Project 3 Practice Exercises<br />
+Function Fun</h2>
+</div>
+<p>
+These exercises are designed to help get you comfortable with functions.
+You will not turn anything in for these exercises, but you must do them
+anyway.  If for the full Project 3 you ask us for help on something that
+is similar to one of these exercises, we may ask you to first explain your
+answer to that similar item in these exercises.  (This is to help you
+learn to recognize common patterns and common errors.)
+</p>
+<p>
+For all programs shown, assume the appropriate headers have been included,
+along with <code>using namespace std;</code> being present.  In other
+words, we won't show <code>#include &lt;iostream></code>, etc.  When asked
+for the output of a program, play computer and determine the output by
+hand instead of just running the program, since this is a skill you'll
+need when debugging (and for the exams).  Similarly, when asked to find an
+error that would cause compilation to fail, try to do that yourself first,
+to train your eye to notice what looks wrong.  After doing a problem yourself,
+you can, if you like, run it on a computer to check your answer.
+</p>
+<ol>
+<li>
+<p>
+What is the output produced by this program?
+</p>
+<pre>
+int square(int n)
+{
+    return n*n;
+}
+
+int main()
+{
+    for (int k = 1; k &lt;= 6; k++)
+        cout &lt;&lt; "The square of " &lt;&lt; k &lt;&lt; " is " &lt;&lt; square(k) &lt;&lt; endl;
+}
+</pre>
+</li><li>
+<p>
+Why doesn't this code compile correctly?
+</p>
+<pre>
+int square(int n)
+{
+    return n*n;
+}
+
+int main()   // This program contains incorrect code!!
+{
+    cout &lt;&lt; "Enter an integer: ";
+    int k;
+    cin >> k;
+    cout &lt;&lt; "The square of " &lt;&lt; k &lt;&lt; " is " &lt;&lt; square(int k) &lt;&lt; endl;
+}
+</pre>
+</li><li>
+<p>
+Why doesn't this code compile correctly?
+</p>
+<pre>
+int main()   // This program contains incorrect code!!
+{
+    int square(int n)
+    {
+        return n*n;
+    }
+
+    cout &lt;&lt; "Enter an integer: ";
+    int k;
+    cin >> k;
+    cout &lt;&lt; "The square of " &lt;&lt; k &lt;&lt; " is " &lt;&lt; square(k) &lt;&lt; endl;
+}
+</pre>
+</li><li>
+<p>
+What is the output produced by this program?
+</p>
+<pre>
+int factorial(int n)
+{
+    int prod = 1;
+    for (int i = 2; i &lt;= n; i++)
+        prod *= i;
+    return prod;
+}
+
+int main()
+{
+    for (int k = 1; k &lt;= 6; k++)
+        cout &lt;&lt; "The factorial of " &lt;&lt; k &lt;&lt; " is " &lt;&lt; factorial(k) &lt;&lt; endl;
+}
+</pre>
+</li><li>
+<p>
+What is the output produced by this program?  Between the function
+<code>printFactorial</code> and the function <code>factorial</code> of the
+previous question, which is likely to be useful in a wider variety of
+programs than the other, and why?
+</p>
+<pre>
+void printFactorial(int n)
+{
+    int prod = 1;
+    for (int i = 2; i &lt;= n; i++)
+        prod *= i;
+    cout &lt;&lt; "The factorial of " &lt;&lt; n &lt;&lt; " is " &lt;&lt; prod &lt;&lt; endl;
+}
+
+int main()
+{
+    for (int k = 1; k &lt;= 6; k++)
+        printFactorial(k);
+}
+</pre>
+</li><li>
+<p>
+What is the output produced by this program?
+</p>
+<pre>
+int countChars(string s, char c)
+{
+    int total = 0;
+    for (int k = 0; k != s.size(); k++)
+    {
+        if (s[k] == c)
+            total++;
+    }
+    return total;
+}
+
+int main()
+{
+    cout &lt;&lt; countChars("abracadabra", 'a') &lt;&lt; endl;
+    int n = 10 * countChars("99 Cent Only", '9') + 5;
+    cout &lt;&lt; n &lt;&lt; endl;
+    cout &lt;&lt; countChars("O Rose, thou art sick!", 'f') &lt;&lt; endl;
+}
+</pre>
+</li><li>
+<p>
+Why doesn't this code compile correctly?
+</p>
+<pre>
+int countChars(string s, char c)
+{
+    int total = 0;
+    for (int k = 0; k != s.size(); k++)
+    {
+        if (s[k] == c)
+            total++;
+    }
+    return total;
+}
+
+int main()   // This program contains incorrect code!!
+{
+    cout &lt;&lt; countChars('s', "She sells seashells down by the seashore") &lt;&lt; endl;
+}
+</pre>
+</li><li>
+<p>
+What is the output produced by this program?
+</p>
+<pre>
+bool contains(string s, char c)
+{
+    for (int k = 0; k != s.size(); k++)
+    {
+        if (s[k] == c)
+            return true;
+    }
+    return false;
+}
+
+int main()
+{
+    if (contains("Computer Science 31", '3'))
+        cout &lt;&lt; "W";
+    if ( ! contains("Smallberg", 'x'))
+        cout &lt;&lt; "o";
+    if (contains("Smallberg", 'l'))
+        cout &lt;&lt; "w";
+    if (contains("Start your CS 31 projects early!", ' '))
+        cout &lt;&lt; "!" &lt;&lt; endl;
+}
+</pre>
+</li><li>
+<p>
+Why does the following program produce the output <code>x</code> instead
+of <code>xy</code>?
+</p>
+<pre>
+bool contains(string s, char c)  // This code is suspect
+{
+    for (int k = 0; k != s.size(); k++)
+    {
+        if (s[k] == c)
+            return true;
+        else
+            return false;
+    }
+}
+
+int main()
+{
+    if (contains("xyz", 'x'))
+        cout &lt;&lt; "x";
+    if (contains("xyz", 'y'))
+        cout &lt;&lt; "y";
+    cout &lt;&lt; endl;
+}
+</pre>
+</li><li>
+<p>
+Why does the following program exhibit undefined behavior (i.e., you might
+get different results on different machines)?
+</p>
+<pre>
+int countSpacesInFirstSentence(string s)  // This code is suspect
+{
+    int nSpaces = 0;
+    for (int k = 0; k != s.size(); k++)
+    {
+        if (s[k] == ' ')
+            nSpaces++;
+        else if (s[k] == '.')
+            return nSpaces;
+    }
+}
+
+int main()
+{
+    cout &lt;&lt; countSpacesInFirstSentence("Call me Ishmael.") &lt;&lt; endl;
+    cout &lt;&lt; countSpacesInFirstSentence("I am Sam.  Sam I am.") &lt;&lt; endl;
+    cout &lt;&lt; countSpacesInFirstSentence("Where now? Who now? When now?") &lt;&lt; endl;
+}
+</pre>
+</li><li>
+<p>
+What is the output of the following program?
+</p>
+<pre>
+string justLetters(string s)
+{
+    string result = "";
+    for (int k = 0; k != s.size(); k++)
+    {
+        if ( islower(s[k]) )
+            result += s[k];
+        if ( isupper(s[k]) )
+            result += tolower(s[k]);
+    }
+    return result;
+}
+
+int main()
+{
+    cout &lt;&lt; justLetters("CS 31 began September 29.") &lt;&lt; endl;
+}
+</pre>
+</li>
+</ol>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/3/funcpractice.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:25 GMT -->
+</html>

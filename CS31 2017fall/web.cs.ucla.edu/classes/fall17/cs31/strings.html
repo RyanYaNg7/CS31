@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/strings.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:25 GMT -->
+<head>
+ <title>Some Things about Strings</title>
+</head>
+<body>
+<div align="center">
+<h2>Some Things about Strings</h2>
+</div>
+<p>
+We've seen how to use the C++ builtin <code>int</code> type.  You can
+create an object <code>n</code> of type <code>int</code> though a
+declaration:  <code>&nbsp;int n;&nbsp;</code>     At any point in time,
+such an object has one value drawn from a large (but finite) set: 
+<em>some big negative integer</em>, ..., -3, -2, -1, 0, 1, 2, 3, ...,
+<em>some big positive integer</em>.  The language enables you to do
+certain operations with <code>int</code>s, among them:
+</p>
+<pre>
+        int k = 2 * 6; // create and initialize one int
+        int m = k;     // and another
+        int n;         // create an int with an unspecified value
+        n = k + 3;     // add ints and assign ints
+        if (m == n)    // compare ints with ==
+            ...
+</pre>
+<p>
+The Standard C++ library enables additional operations:
+</p>
+<pre>
+        #include &lt;iostream>
+
+        std::cout &lt;&lt; k;   // write a sequence of characters representing
+                          // the value of an int
+        std::cin >> k;    // read a sequence of characters representing
+                          // the value of an int, and store that value
+                          // in an int variable
+</pre>
+<p>
+C++ has a builtin type <code>double</code>, with similar operations (but
+not identical, of course, because <code>double</code>s have values drawn
+from a different set, and the detailed semantics (i.e., meaning) of
+operations like division, output, and input are not the same).
+</p><p>
+The C++ <em>language</em> has little in the way of support for
+conveniently dealing with character strings.  However, the C++
+<em>library</em> does.  By saying  <code>&nbsp;#include
+&lt;string>&nbsp;</code> you enable the creation of
+<code>&nbsp;std::string&nbsp;</code> objects. At any point in time, such
+an object has a value drawn from a large set: the set of all sequences of
+characters that can fit in the computer's finite memory.  Examples of
+such string values are the character sequences between the vertical bars below:
+</p>
+<pre>
+        |hello|         // 5 characters
+        |R2D2|          // 4 characters
+        |  #@ %*  |     // 9 characters (blanks are characters)
+        ||              // 0 characters (the so-called "empty string")
+</pre>
+<p>
+You can do an awful lot with strings, but we will limit ourselves for now
+to a few operations:            
+</p>
+<pre>
+        using namespace std; // so we can leave off the  std::
+        string s = "hello";  // create and initialize one string
+        string t = s;        // and another
+        string u;            // create a string and initialize it to
+                             // the empty string!
+        u = s;               // assign strings
+        if (s == "goodbye")  // compare strings with ==
+</pre>
+<p>
+If we also say <code>&nbsp;#include &lt;iostream>&nbsp;</code> we can
+write and read strings:
+</p>
+<pre>
+        cout &lt;&lt; s;        // write the sequence of characters
+        getline(cin, s);  // read a sequence of characters up to and
+                          // including the next newline, and store that
+                          // sequence (without the newline) in a string
+                          // variable
+</pre>
+<p>
+While you can also say <code>&nbsp;cin >> s;&nbsp;</code> it's less useful
+and more prone to not doing what you really intended.  It will read and
+discard leading whitespace, then read and store non-whitespace characters
+into the string variable, stopping at (without consuming) the next
+whitespace character.  In other words, it reads in only the next word.  If
+the input were <code>&nbsp;This is a test&nbsp;</code>, the value stored
+in <code>s</code> would be <code>This</code>, and further input operations
+would start by reading the blank character before the <code>i</code> of
+<code>is</code>.  We're not going to use this way of doing string input in
+this class; use <code>getline</code> instead.
+</p><p>
+Now for a problem.  Suppose we want the following interaction:
+</p>
+<pre>
+        How many place settings would you like to buy? <strong>12</strong>
+        In which style? <strong>Floral Tapestry</strong>
+</pre>
+<p>
+If our program says
+</p>
+<pre>
+        cout &lt;&lt; "How many place settings would you like to buy? ";
+        int numberOfSettings;
+        cin >> numberOfSettings;
+
+        cout &lt;&lt; "In which style? ";
+        string style;
+        getline(cin, style);
+</pre>
+<p>
+we end up with the empty string as the value of <code>style</code>.  This
+is because the expression <code>&nbsp;cin >> numberOfSettings&nbsp;</code>
+consumes the <code>1</code> and <code>2</code> characters, but not the
+newline we typed right after the <code>2</code>.  The expression
+<code>&nbsp;getline(cin, style)&nbsp;</code> picks up right where the
+previous input operation left off, so it reads all (zero) characters up to
+that newline, and that newline itself, and stores the zero-character sequence
+in <code>style</code>.  To throw away any input after the <code>12</code>, we
+should have said
+</p>
+<pre>
+        cout &lt;&lt; "How many place settings would you like to buy? ";
+        int numberOfSettings;
+        cin >> numberOfSettings;
+        cin.ignore(10000, '\n');       // this is new
+
+        cout &lt;&lt; "In which style? ";
+        string style;
+        getline(cin, style);
+</pre>
+<p>
+The expression <code>&nbsp;cin.ignore(10000, '\n')&nbsp;</code> causes
+characters up to and including the next newline character to be consumed
+and discarded.  Technically, it will consume and discard either all
+characters up to the next newline or 10000 characters, whichever comes
+first.  We pick a huge number so that the latter situation will never
+occur.  Notice that we use single quotes, not double quotes, to denote the
+single newline character here.
+</p><p>
+The variety of syntaxes for doing input (<code>cin >> ...;
+getline(cin,...);  cin.ignore(...);</code>) admittedly seems haphazard, but
+that's because we're getting only glimpses of the bigger, more systematic
+picture.  There is certainly much more that can be done with strings other
+than what we've shown here, but the information in this tutorial will
+suffice to enable you to do Project 2.
+</p>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/strings.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:25 GMT -->
+</html>

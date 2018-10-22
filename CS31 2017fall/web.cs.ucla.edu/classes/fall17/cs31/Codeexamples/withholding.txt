@@ -1,0 +1,45 @@
+How many hours did you work? 40
+What is your hourly rate of pay? 16.13
+You earned $645.20
+$64.52 will be withheld
+
+======================================================
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+   const double HOURLY_RATE_THRESHOLD = 14.00;
+   const double HIGH_WITHHOLDING_RATE = 0.10;
+   const double LOW_WITHHOLDING_RATE = 0.05;
+
+     // Gather work data
+
+   cout << "How many hours did you work? ";
+   double hoursWorked;
+   cin >> hoursWorked;
+
+   cout << "What is your hourly rate of pay? ";
+   double payRate;
+   cin >> payRate;
+
+     // Compute and print earnings
+
+   double amtEarned = hoursWorked * payRate;
+   cout.setf(ios::fixed);
+   cout.precision(2);
+   cout << "You earned $" << amtEarned << endl;
+
+     // Compute and print withholding
+
+   double withholdingRate;
+
+   if (payRate >= HOURLY_RATE_THRESHOLD)
+      withholdingRate = HIGH_WITHHOLDING_RATE;
+   else
+      withholdingRate = LOW_WITHHOLDING_RATE;
+
+   cout << "$" << (withholdingRate * amtEarned)
+        << " will be withheld" << endl;
+}

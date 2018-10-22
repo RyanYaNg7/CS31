@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/2/faq.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:09 GMT -->
+<head>
+ <title>CS 31 Project 2 FAQ, Fall 2017</title>
+</head>
+<body>
+<div align="right">
+Fall 2017 CS 31 
+</div>
+<div align="center">
+<h2>Project 2 FAQ</h2>
+</div>
+<ol>
+<li>
+<p>
+<strong>How do I terminate the program other than by reaching the end of
+<code>main()</code>?</strong>
+</p><p>
+You can do something like this:
+</p>
+<pre>
+	int main()
+	{
+	    <em>do some stuff</em>
+	    if (<em>something bad happened</em>)
+	    {
+	        <em>write an error message</em>
+	        return 1;    <em>// non-zero value means failure</em>
+	    }
+	    <em>do some more stuff</em>
+	}
+</pre>
+<p>
+If something bad happens, this will write an error message and terminate the
+program without doing some more stuff.
+</p>
+</li>
+<li>
+<p>
+<strong>When I run my program, why does the dialog proceed like this?</strong>
+</p>
+<pre>
+	Age of rider: <strong>19</strong>
+	Student? (y/n): Destination: 
+</pre>
+<strong>Why didn't it give me a chance to type y or n for the student
+status?</strong>
+</p><p>
+If you had read the <a href="../../strings.html">Some Things about Strings</a>
+writeup, you'd know why.  (Look at the discussion of the Floral Tapestry
+example and the use of <code>cin.ignore(&hellip;)</code>.)
+</p>
+</li>
+<li>
+<p>
+<strong>Should the very last character my program writes be a newline?</strong>
+</p>
+<p>
+It won't matter to our grading tool, but it's better style.  In other words,
+if the last line your program is going to write in some cases is <code>You
+must enter y or n</code>, then saying
+</p>
+<pre>
+	cout << "You must enter y or n" << endl;
+</pre>
+<p>
+or
+</p>
+<pre>
+	cout << "You must enter y or n\n";
+</pre>
+<p>
+is better than
+</p>
+<pre>
+	cout << "You must enter y or n";
+</pre>
+<p>
+with no further output.  Oh, and don't worry about the <code>Press any key
+to continue</code> message.  That's something the Visual Studio environment
+writes after your program finishes, but the way our grading tool runs your
+program, that message isn't produced.
+</p>
+</li>
+<li>
+<p>
+<strong>Is zero negative?</strong>
+</p><p>
+<a href="http://mathworld.wolfram.com/Negative.html" target="_blank">No</a>
+&mdash; never was, never will be.  Why would you think that when we use a
+word in a specification, we're using some idiosyncratic definition like
+<a href="http://www.sabian.org/Alice/lgchap06.htm" target="_blank">Humpty
+Dumpty</a> would?  There's glory for you!  Anyway, perhaps you should
+<a href="http://www.amazon.com/exec/obidos/ASIN/0140296476/"
+target="_blank">learn a bit more about zero</a>.
+</p>
+</li>
+<li>
+<p>
+<strong>My program behaves weirdly when, in response to the second
+prompt, I type <i>you betcha!</i> or some other phrase.  Why?</strong>
+</p><p>
+You're probably using a <code>char</code> for the response instead of a
+<code>string</code>.  Read the response into a <code>string</code> using
+<code>getline</code> &mdash; that will make it easier to write a program
+that behaves according to the spec.
+</p>
+</li>
+<li>
+<p>
+<strong>I wrote the program and now I'm trying to get it to work.  It's not
+reading the input correctly, it's printing multiple messages, and many output
+numbers are wrong.  What can I do?</strong>
+</p><p>
+Most importantly, learn this lesson from your mistake:  You should develop
+your programs incrementally.  It seems that you did not do this; instead,
+you wrote a lot of code and then tried to test it, so all the problems
+with your code are hitting you at once.
+</p><p>
+It may seem like a step backward, but what you should do is start over again.
+Create a new project and solve a simplified version of the problem.  For
+example, assume the user will always enter correct input, and have your
+program use a very simple fare formula (e.g., the fare is always $1.35
+plus $0.55 per zone boundary crossed, without any discounts).  Get that
+working, making sure the format of any output you write is correct.  Once
+you get that working, enhance the program to check for an invalid rider
+age, and make sure your code does what's required for both valid and
+invalid ages.  Then add checking for an invalid reponse to the student
+question and test the code.  Continuing to add error-checking code in this
+fashion, you should end up with a program that does everything except
+always computing the right fare amount in the case of valid input.
+</p><p>
+That's a good state to be in, because now you know the only thing you have to
+do is change the computation of the fare; that's independent of everything
+else you've written and know to be correct.  Since the actual fare
+calculation rules are complex, continue by implementing a simplification
+that's only a little more complex than your original simplification.  For
+example, ignore the senior discount.  Get that working.  Add in correctly
+handling seniors.  Get that working.  You're done!
+</p><p>
+At each step where you've got something working, save a copy of the program.
+That way, if you mangle things up in the next phase, or you run out of time,
+you'll be able to turn in a program that will compile and pass at least
+some of our test cases.  That beats getting a zero for correctness!
+</p>
+</li>
+<li>
+<p>
+<strong>I've tested my program thoroughly and I believe my program is behaving
+the way it's required to.  How can I shake the feeling I have, though, that
+I might have overlooked something fundamental that will cost me a lot of
+correctness points when your testing script runs it?</strong>
+</p><p>
+Follow the instructions in the <a href="../../linux.html">g++ with Linux</a>
+writeup to run your program on the SEASnet Linux server.  Then, when you are
+satisfied that it works, run this command on that server:
+</p>
+<pre>
+	curl -s -L http://cs.ucla.edu/classes/fall17/cs31/Utilities/p2tester | bash
+</pre>
+It will test your program on a couple of cases in the manner that our testing
+script will.  (Of course, our testing script will test many more cases than
+just a couple.)
+</li>
+</ol>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/2/faq.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:09 GMT -->
+</html>

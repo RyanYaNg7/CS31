@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/3/faq.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:05 GMT -->
+<head>
+ <title>CS 31 Project 3 FAQ, Fall 2017</title>
+</head>
+<body>
+<div align="right">
+Fall 2017 CS 31 
+</div>
+<div align="center">
+<h2>Project 3 FAQ</h2>
+</div>
+<ol>
+<li>
+<p>
+<strong>How do I begin?</strong>
+</p><p>
+First, the announcements dated 10/19/17 are loaded with resources to give
+you the tools you need.  Read all the writeups.  Even if you don't see why
+they're relevant at first, as you progress in the project you'll be
+thinking at various points "Now I need to &hellip;.  Wait!  Didn't I read
+something related to that?", and can read the appropriate writeup again,
+this time with greater understanding.  Do the Project 3 function practice
+exercises to make sure you understand the mechanics of using functions in
+C++.
+</p><p>
+Again, as in Project 2, one secret of success is to develop incrementally.
+Work on the easier function first:  <code>hasCorrectSyntax</code>.  Make
+a tremendously simplifying assumption:  A song is a song string if it contains
+no beats at all.  Get the function working with that simplification:  it
+should return true for the empty string, and false otherwise.
+</p><p>
+This seems ridiculously trivial, but it gets you past an important hurdle.
+You now know how to declare a function, implement it, and write a main routine
+that tests it.  Further work then becomes merely adjusting the implementation
+and the test cases.
+</p><p>
+Now go with a simplification that is a little less tremendous:  A song is a
+song string if it contains no beats at all, or exactly one beat with no
+notes at all, or exactly one beat with exactly one note consisting only of
+a note letter (no accidental sign or octave digit).  Get the function
+working with that simplification, updating and adding to your test cases in
+your main routine.
+</p><p>
+Continue in this manner, removing more and more simplifications until you're
+implementing the definition of a song string as in the spec.  There are a
+number of orders in which you could remove the simplifications; here's one
+such ordering:
+</p>
+<ol>
+<li>
+No beats at all.
+</li><li>
+No beats, or exactly one beat with no note, or exactly one beat with
+exactly one note (with no accidental sign or octave number).
+</li><li>
+Like the previous simplification, but allow an optional accidental sign.
+</li><li>
+Like the previous simplification, but allow an optional octave digit.  At
+this point, your definition of well-formed song is zero or one beat, where a
+beat has zero or one note.
+</li><li>
+Zero or more beats, where a beat has zero or one note.
+</li><li>
+Zero or more beats, where a beat has zero or more notes.  At this point,
+you're implementing what the spec requires of this function.
+</li>
+</ol>
+<p>
+Now that <code>hasCorrectSyntax</code> is correctly implemented, proceed
+in a similar fashion to implement <code>encodeSong</code>, starting with
+an extreme simplification, then working your way through successive removals
+of simpifying assumptions.
+</p><p>
+As we said in the FAQ for Project 2, it might seem counterintuitive, but
+following this incremental approach to developing your program will take
+<em>less</em> total time than trying to write the whole thing at once.
+</p><p>
+At each step where you've got something working, save a copy of the program.
+That way, if you mangle things up in the next phase, or you run out of time,
+you'll be able to turn in a program that will compile and pass at least
+some of our test cases.  That beats getting a zero for correctness!
+</p>
+</li>
+<li>
+<p>
+<strong>Can we assume the <code>song</code> parameter never contains
+<em>blah blah blah</em>?  Can we assume the <code>song</code> parameter
+always contains <em>blah blah blah</em>?</strong>
+</p>
+<p>
+No!  The <code>song</code> parameter might contain <em>any</em> string!
+Of course, if that string is not a syntactically correct song string, the
+spec tells you what the function must do.
+</p>
+</li>
+<li>
+<p>
+<strong>Is such-and-such a syntactically correct song string?</strong>
+</p><p>
+If you think it is, how many beats does it have?  What are they? Are you
+sure they each fit the definition of a beat?  Are you sure that every
+character in the supposed song string is part of some beat?
+</p>
+</li>
+</ol>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/3/faq.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:05 GMT -->
+</html>

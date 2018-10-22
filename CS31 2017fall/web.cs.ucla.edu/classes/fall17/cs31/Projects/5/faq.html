@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/5/faq.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:03 GMT -->
+<head>
+ <title>CS 31 Project 5 FAQ, Fall 2017</title>
+</head>
+<body>
+<div align="right">
+Fall 2017 CS 31 
+</div>
+<div align="center">
+<h2>Project 5 FAQ</h2>
+</div>
+<ol>
+<li>
+<p>
+<strong>
+What does it mean when in Visual C++ my program dies with a dialog box
+appearing saying "Debug Assertion Failed! ... File: ...\src\isctype.c ...
+expression: (unsigned)(c+1)<=256" ?
+</strong>
+</p>
+<p>
+It means you called one of the functions defined by
+<code>&lt;cctype></code>, such as <code>isalpha</code> or <code>tolower</code>,
+with a character whose encoding is outside the range of 0 through 127. 
+Since all the normal characters you would use (space, letters, punctuation,
+<code>'\0'</code>, etc.) fall in that range, you're probably passing an
+uninitialized character to the function.  Perhaps you're examining a character
+past the <code>'\0'</code> marking the end of a C string, or perhaps you built
+what you thought was a C string but forgot to end it with a <code>'\0'</code>.
+</p>
+</li>
+<li>
+<p>
+<strong>
+The spec describes circumstances under which <code>runOneRound</code>
+must return &minus;1.  What should my main routine do in that case?
+</strong>
+</p>
+Since the spec doesn't say, you can do what you like.
+</p><p>
+If you structure your main routine right, it should never reach a point
+where it calls <code>runOneRound</code> if the circumstances under which it
+calls that function are such that the function would return &minus;1.  In
+a perfect world, you wouldn't need to test for that impossible situation. 
+But in the real world, you may have a bug in your main routine that lets
+it call <code>runOneRound</code> with bad argument values.  A
+reasonable bit of defensive programming would be to test for the &minus;1
+return, write a message and terminate the program.
+</p><p>
+Of course, part of our correctness testing will be to test
+<code>runOneRound</code> independently of your main routine.  For those
+tests, we'd rename your main routine to something harmless, never call it,
+and instead append our own main routine that will, for some tests, pass
+arguments to <code>runOneRound</code> that should cause it to return
+&minus;1, which we'll check.
+</p>
+</li>
+<li>
+<p>
+<strong>How can I check that I haven't overlooked something fundamental that
+will cost me a lot of correctness points when your testing script runs
+it?</strong>
+</p><p>
+While the following is not as thorough as our test cases will be, make sure
+you can pass these two tests:
+</p>
+<ul>
+<li>
+In <code>utilities.cpp</code>, Add the following as the first five lines of
+the implementation of <code>getWords</code>:
+<pre>
+if (maxWords &lt; 2)          // Remove this line after completing Tests 1 and 2
+    return 0;              // Remove this line after completing Tests 1 and 2
+strcpy(words[0], "crypt"); // Remove this line after completing Tests 1 and 2
+strcpy(words[1], "truly"); // Remove this line after completing Tests 1 and 2
+return 2;                  // Remove this line after completing Tests 1 and 2
+</pre>
+</li><li>
+Test 1:  Add the following as the first three lines of your implementation of
+<code>runOneRound</code>:
+<pre>
+static int zzz = 3; // Remove this line after completing Test 1
+zzz--;              // Remove this line after completing Test 1
+return zzz;         // Remove this line after completing Test 1
+</pre>
+<p>
+Build and run your program.  In response to the prompt for the number of rounds
+to play, enter <code>2</code>.  The output must match the following
+<strong>exactly</strong> &mdash; same spelling, capitalization, spacing,
+punctuation, etc.:
+</p>
+<pre>
+How many rounds do you want to play? <strong>2</strong>
+
+Round 1
+The secret word is 5 letters long.
+You got it in 2 tries.
+Average: 2.00, minimum: 2, maximum: 2
+
+Round 2
+The secret word is 5 letters long.
+You got it in 1 try.
+Average: 1.50, minimum: 1, maximum: 2
+</pre>
+<p>
+When you pass this test, remove the three lines you added to
+<code>runOneRound</code>.
+</p>
+</li><li>
+Test 2:  Add the following as the first eight lines of your implementation of
+<code>main</code>:
+<pre>
+char zzz[9000][7];                                // Remove this line after completing Test 2
+if (getWords(zzz, 9000, "no file used") == 2  &amp;&amp;  // Remove this line after completing Test 2
+      runOneRound(zzz, 2, 0) == 1  &amp;&amp;             // Remove this line after completing Test 2
+      runOneRound(zzz, 2, 1) == 2)                // Remove this line after completing Test 2
+    cout &lt;&lt; "PASSED" &lt;&lt; endl;                     // Remove this line after completing Test 2
+else                                              // Remove this line after completing Test 2
+    cout &lt;&lt; "FAILED" &lt;&lt; endl;                     // Remove this line after completing Test 2
+return 0;                                         // Remove this line after completing Test 2
+</pre>
+<p>
+Build and run your program.  In response to the first prompt for a probe word,
+enter <code>crypt</code>.  In response to the second prompt for a probe word,
+enter <code>crypt</code>.  In response to the third prompt for a probe word,
+enter <code>truly</code>.  The output must match the following
+<strong>exactly</strong> &mdash; same spelling, capitalization, spacing,
+punctuation, etc.:
+</p>
+<pre>
+Probe word: <strong>crypt</strong>
+Probe word: <strong>crypt</strong>
+Stars: 1, Planets: 2
+Probe word: <strong>truly</strong>
+PASSED
+</pre>
+When you pass this test, remove the eight lines you added to <code>main</code>.
+</li>
+</ul>
+</li>
+<li>
+<p>
+<strong>
+If a letter could be part of a star or part of a planet, must we prefer one
+over another?
+</strong>
+</p>
+Yes.  The wording in the spec doesn't make this clear, although it's
+suggested by an example:
+</p>
+<pre>
+	shown: EGRET		 not shown: EGRET
+	       RAGE		            RAGE
+	       p ps   1 s / 2 p             p pp   0 s / 3 p
+	   <em>We want this</em>	                <em>We don't want this</em>
+</pre>
+<p>
+We don't want the E of RAGE to be considered paired with the
+<em>first</em> E of EGRET as part of a planet when it could instead be paired
+with the <em>second</em> E of EGRET as part of a star.
+</p><p>
+So here's the rule that you must follow:  If a letter at a particular
+position in a word could be considered to be part of a star or part of a
+planet, it must be treated as part of a star.
+</p>
+</li>
+</ol>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/5/faq.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:03 GMT -->
+</html>

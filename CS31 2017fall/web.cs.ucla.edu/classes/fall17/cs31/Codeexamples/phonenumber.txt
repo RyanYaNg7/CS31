@@ -1,0 +1,44 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+
+bool isValidPhoneNumber(string pn);
+string digitsOf(string pn);
+
+int main()
+{
+    cout << "Enter a phone number: ";
+    string phone;
+    getline(cin, phone);
+    if (isValidPhoneNumber(phone))
+        cout << "The digits in the number are " << digitsOf(phone) << endl;
+    else
+        cout << "A phone number must have ten digits." << endl;
+}
+
+bool isValidPhoneNumber(string pn)
+{
+      // A valid phone number string contains exactly 10 digit characters
+
+    int numberOfDigits = 0;
+    for (int k = 0; k != pn.size(); k++)
+    {
+        if (isdigit(pn[k]))
+            numberOfDigits++;
+    }
+    return (numberOfDigits == 10);
+}
+
+string digitsOf(string pn)
+{
+      // Return a string containing only the digit characters in pn
+
+    string digitsOnly = "";
+    for (int k = 0; k != pn.size(); k++)
+    {
+        if (isdigit(pn[k]))
+            digitsOnly += pn[k];
+    }
+    return digitsOnly;
+}

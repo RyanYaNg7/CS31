@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/bitofstrings.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:25 GMT -->
+<head>
+ <title>A Bit More about Strings</title>
+</head>
+<body>
+<div align="center">
+<h2>A Bit More about Strings</h2>
+</div>
+<p>
+A string is a sequence of zero or more characters.  The <code>size</code>
+function tells you how many characters are in the string:
+</p>
+<pre>
+        string s = "Hello";
+        cout &lt&lt; s.size();   // writes 5
+        s = "Wow";
+        cout &lt;&lt; s.size();   // writes 3
+        s = "";
+        cout &lt;&lt; s.size();   // writes 0
+</pre>
+<p>
+(For historical reasons, there is also a <code>length</code> function that
+returns the same value that <code>size</code> does.  In other words,
+<code>s.length()</code> and <code>s.size()</code> may be used interchangeably.)
+</p>
+<p>
+You can access individual characters in a string using the <code>[]</code>
+operator.  The positions of the characters in a string are numbered from left
+to right, starting at 0.  Your program's behavior is undefined if it tries to
+access a character at a position that is out of range for the string.
+</p>
+<pre>
+                                 //  01234
+        string s = "Hello";      //  Hello
+        cout &lt;&lt; s[0];      // writes H
+        cout &lt;&lt; s[4];      // writes o
+        cout &lt;&lt; s[6];      // Undefined behavior!
+        cout &lt;&lt; s[-1];     // Undefined behavior!
+</pre>
+<p>
+To visit every character in a string (for example, to write each character of
+the string on a line by itself), you can say
+</p>
+<pre>
+        string s = "Hello";
+        for (int k = 0; k != s.size(); k++)
+                cout &lt;&lt; s[k] &lt;&lt; endl;
+</pre>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/bitofstrings.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:25 GMT -->
+</html>

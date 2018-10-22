@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/2/testing.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:05 GMT -->
+<head>
+ <title>Project 2 Test Data</title>
+</head>
+<body>
+<h2>Project 2 Test Data</h2>
+<p>
+For Project 2, you not only had to compute the right fare for a variety of
+cases, but you had to report errors correctly.  The amount of the fare
+should agree with what the <a href="calc.html">fare calculator</a> computes.
+</p><p>
+Most people whose correctness score is below 45 made one or more of
+these silly mistakes:
+</p>
+<ul>
+<li>Not always writing a line of three hyphens (even before error messages)</li>
+<li>Not always writing exactly one line after the line of three hyphens</li>
+<li>Starting an output line with a space</li>
+<li>Misspelling words (or wrong, missing, or extra words)</li>
+<li>Miscapitalizing words</li>
+<li>Missing space between words</li>
+<li>Extra space after the dollar sign</li>
+<li>Missing dollar sign</li>
+<li>Missing or extra digits in the output</li>
+<li>Period at the end of the messages</li>
+</ul>
+<p>
+(Some people who scored 45 or above also made some of these mistakes,
+especially forgetting the line of three hyphens before error messages.)
+</p><p>
+Making mistakes like these is inexcusable &mdash; we told you to be
+careful if you were a bad speller or typist, or if English was not your
+first language.  We provided a tester that checked for some of these mistakes.
+We even listed in the spec mistakes to watch out for.  Despite all that,
+some people chose to ignore all that guidance and made the mistakes anyway.
+</p><p>
+Here are the 27 test cases; cases 1 through 7 were worth 2 points each, case 8
+was worth 4 points, and the rest were worth 3 points each.
+</p>
+<pre>
+================== <em># 1</em>
+-1
+n
+Jollywood
+2
+================== <em># 2</em>
+22
+Q
+Jollywood
+2
+================== <em># 3</em>
+22
+n
+
+2
+================== <em># 4</em>
+22
+n
+Jollywood
+-1
+================== <em># 5</em>
+22
+N
+Jollywood
+2
+================== <em># 6</em>
+22
+no
+Jollywood
+2
+================== <em># 7</em>
+22
+no way
+Jollywood
+2
+================== <em># 8</em>
+-1
+Q
+
+-1
+================== <em># 9</em>
+0
+n
+Jollywood
+1
+================== <em># 10</em>
+22
+n
+San Lousy Abysmal
+2
+================== <em># 11</em>
+22
+n
+Jollywood
+2
+================== <em># 12</em>
+22
+y
+Jollywood
+2
+================== <em># 13</em>
+18
+n
+Jollywood
+1
+================== <em># 14</em>
+18
+y
+Jollywood
+0
+================== <em># 15</em>
+17
+n
+Jollywood
+2
+================== <em># 16</em>
+17
+n
+Jollywood
+1
+================== <em># 17</em>
+17
+y
+Jollywood
+1
+================== <em># 18</em>
+17
+n
+Jollywood
+0
+================== <em># 19</em>
+65
+n
+Jollywood
+0
+================== <em># 20</em>
+66
+n
+Jollywood
+0
+================== <em># 21</em>
+66
+y
+Jollywood
+0
+================== <em># 22</em>
+66
+n
+Jollywood
+1
+================== <em># 23</em>
+66
+y
+Jollywood
+1
+================== <em># 24</em>
+66
+n
+Jollywood
+2
+================== <em># 25</em>
+66
+y
+Jollywood
+2
+================== <em># 26</em>
+40
+n
+Jollywood
+9
+================== <em># 27</em>
+40
+n
+Jollywood
+3
+</pre>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/2/testing.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:07 GMT -->
+</html>

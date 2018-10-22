@@ -1,0 +1,37 @@
+What is your name? Sir Robin
+How old are you? 32
+What is your quest? To seek the Holy Grail
+Hello, brave Sir Robin!
+You want To seek the Holy Grail
+If you live, next year you will be 33
+
+======================================================
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main()
+{
+
+     // Get information
+
+   cout << "What is your name? ";
+   string personsName;
+   getline(cin, personsName);
+
+   cout << "How old are you? ";
+   int age;
+   cin >> age;
+   cin.ignore(10000, '\n');   // ignore the rest of the line with the number
+
+   cout << "What is your quest? ";
+   string quest;
+   getline(cin, quest);
+
+     // Write greeting, etc.
+
+   cout << "Hello, brave " << personsName << "!" << endl;
+   cout << "You want " << quest << endl;
+   cout << "If you live, next year you will be " << age+1 << endl;
+}

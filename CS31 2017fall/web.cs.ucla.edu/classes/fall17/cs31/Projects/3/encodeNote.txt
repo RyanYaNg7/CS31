@@ -1,0 +1,59 @@
+//*************************************
+//  encodeNote
+//*************************************
+
+// Given an octave number, a note letter, and an accidental sign, return
+// the character that the indicated note is encoded as if it is playable.
+// Return a space character if it is not playable.
+//
+// First parameter:   the octave number (the integer 4 is the number of the
+//                    octave that starts with middle C, for example).
+// Second parameter:  an upper case note letter, 'A' through 'G'
+// Third parameter:   '#', 'b', or ' ' (meaning no accidental sign)
+//
+// Examples:  encodeNote(4, 'A', ' ') returns 'Q'
+//            encodeNote(4, 'A', '#') returns '%'
+//            encodeNote(4, 'H', ' ') returns ' '
+
+char encodeNote(int octave, char noteLetter, char accidentalSign)
+{
+      // This check is here solely to report a common CS 31 student error.
+    if (octave > 9)
+    {
+        cerr << "********** encodeNote was called with first argument = "
+             << octave << endl;
+    }
+
+      // Convert Cb, C, C#/Db, D, D#/Eb, ..., B, B#
+      //      to -1, 0,   1,   2,   3, ...,  11, 12
+
+    int note;
+    switch (noteLetter)
+    {
+      case 'C':  note =  0; break;
+      case 'D':  note =  2; break;
+      case 'E':  note =  4; break;
+      case 'F':  note =  5; break;
+      case 'G':  note =  7; break;
+      case 'A':  note =  9; break;
+      case 'B':  note = 11; break;
+      default:   return ' ';
+    }
+    switch (accidentalSign)
+    {
+      case '#':  note++; break;
+      case 'b':  note--; break;
+      case ' ':  break;
+      default:   return ' ';
+    }
+
+      // Convert ..., A#1, B1, C2, C#2, D2, ... to
+      //         ..., -2,  -1, 0,   1,  2, ...
+
+    int sequenceNumber = 12 * (octave - 2) + note;
+
+    string keymap = "Z1X2CV3B4N5M,6.7/A8S9D0FG!H@JK#L$Q%WE^R&TY*U(I)OP";
+    if (sequenceNumber < 0  ||  sequenceNumber >= keymap.size())
+        return ' ';
+    return keymap[sequenceNumber];
+}

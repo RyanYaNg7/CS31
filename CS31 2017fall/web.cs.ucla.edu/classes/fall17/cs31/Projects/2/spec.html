@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/2/spec.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:07 GMT -->
+<head>
+ <title>CS 31 Project 2, Fall 2017</title>
+</head>
+<body>
+<div align="right">
+Fall 2017 CS 31 
+</div>
+<div align="center">
+<h2>Programming Assignment 2<br />
+It's Not Fare!</h2>
+<p>
+<strong>Time due: 11:00 PM Tuesday, October 17</strong>
+</p>
+</div>
+<p style="font-size: smaller">
+Before you ask a question about this specification, see if it has already
+been addressed by the <a href="faq.html">Project 2 FAQ</a>.  And read the
+FAQ before you turn in this project, to be sure you didn't misinterpret
+anything.
+</p>
+<p>
+(Be sure you also do the <a href="hw.html">homework</a> accompanying this
+project.)
+</p>
+<p>
+You are a software developer for the Lost Angels County Department of
+Transportation.  Bus riders in the county may purchase fare tickets.  You
+have been assigned to write a program that prints these tickets.
+</p>
+<p>
+Your program must accept as input the rider's destination, the number of zone
+boundaries crossed, the rider's age, and whether or not the rider is a
+student.  The output will repeat the destination and tell the fare.
+</p>
+<p>
+Here is an example of a dialog with the program (user input is shown in
+<strong>boldface</strong>):
+</p>
+<pre>
+	Age of rider: <strong>21</strong>
+	Student? (y/n): <strong>n</strong>
+	Destination: <strong>Bay City</strong>
+	Number of zone boundaries crossed: <strong>2</strong>
+	---
+	The fare to Bay City is $2.45
+</pre>
+<p>
+The fare is $1.35 plus $0.55 per zone boundary crossed, unless a discount
+applies:
+</p>
+<ul>
+<li>
+Riders under 18 get a break for short trips:  For trips crossing 0 or 1
+zone boundaries, the fare is $0.65
+</li><li>
+For trips crossing 0 or 1 zone boundaries, students 18 or over get the
+same break as riders under 18.
+</li><li>
+The senior fare for riders 65 and over is $0.55 plus $0.25 per zone
+boundary crossed.  However, for a trip crossing 0 boundaries, the senior
+fare is only $0.45.  Seniors who believe in lifelong learning (i.e., are
+students) are no dummies:  They pay the cheapest fare available to them.
+</li>
+</ul>
+<p>
+Here's another example:
+</p>
+<pre>
+	Age of rider: <strong>22</strong>
+	Student? (y/n): <strong>y</strong>
+	Destination: <strong>Jollywood</strong>
+	Number of zone boundaries crossed: <strong>1</strong>
+	---
+	The fare to Jollywood is $0.65
+</pre>
+<p>
+You can test your understanding of the fare schedule by experimenting
+with the <a href="calc.html">fare calculator</a> we found at the Lost Angels
+County Department of Transportation website.
+</p><p>
+Your program must collect the information for one transaction in the manner
+indicated by the examples, and then write to <code>cout</code> a line with
+three hyphens only (no spaces or other characters), followed by exactly
+one line in a format required below.  Our grading tool will judge the
+correctness of your program by examining only the line following the line
+with three hyphens (and verifying that there are no additional lines).
+That one line you write must be in one of the following five forms; the
+text must be <strong>identical</strong> to what is shown, except that
+<em>italicized</em> items are replaced as appropriate:
+</p>
+<ul>
+<li>
+If the rider's age is negative:<br />
+<code>&nbsp;&nbsp;&nbsp;The age must not be negative</code>
+</li><li>
+If the student status is not <code>y</code> or <code>n</code> (must be lower
+case):<br /><code>&nbsp;&nbsp;&nbsp;You must enter y or n</code>
+</li><li>
+If nothing was provided for the destination:<br />
+<code>&nbsp;&nbsp;&nbsp;You must enter a destination</code>
+</li><li>
+If the number of zone boundaries crossed is negative:<br />
+<code>&nbsp;&nbsp;&nbsp;The number of zone boundaries crossed must not be negative</code>
+</li><li>
+If the input is valid and none of the preceding situations holds:<br />
+<code>&nbsp;&nbsp;&nbsp;The fare to <em>destination</em> is $<em>amount</em></code>
+</li>
+</ul>
+<p>
+In the last case, <em>destination</em> must be the destination as entered, and
+<em>amount</em> must be the correct answer, shown as a non-negative number
+with at least one digit to the left and exactly two digits to the right of
+the decimal point.  (See p. 32-33 of the Savitch book.)  The lines you
+write must not start with any spaces.  If you are not a good speller or
+typist, or if English is not your first language, be especially careful
+about duplicating the messages <strong>exactly</strong>.  Here are some
+foolish mistakes that may cause you to get no points for correctness on
+this project, no matter how much time you put into it:
+</p>
+<ul>
+<li>Not writing to <code>cout</code> a line with exactly three hyphens in
+<em>all</em> cases.</li>
+<li>Writing any spaces on the line that is supposed to have three hyphens.</li>
+<li>Writing more than one line after the line with three hyphens.  Don't,
+for example, add a gratuitous "Thank you for riding a Lost Angels County bus."
+</li>
+<li>Writing lines to <code>cerr</code> instead of <code>cout</code>.</li>
+<li>Writing lines like these:
+<pre>
+	The fair to Redundant Beach is $1.05   <em>misspelling</em>
+	The Fare to Redundant Beach is $1.05   <em>wrong capitalization</em>
+	The fare for Redundant Beach is $1.05  <em>wrong text</em>
+	The fare to Redundant Beach is $ 1.05  <em>extra space</em>
+	The fare to Redundant Beach is $1.05.  <em>extra period</em>
+	The fare to Redundant Beach is $1.050  <em>extra digit</em>
+<!--
+	The fare to Unseeno is $1              <em>missing decimal point and digits</em>
+-->
+</pre>
+</li>
+</ul>
+<p>
+Your program must gather the age, the student status, the destination type, and
+the number of zone boundaries crossed in that order.  However, if you
+detect an error in an item, you do not have to request or get the
+remaining items if you don't want to; just be sure you write to
+<code>cout</code> the line of three hyphens, the required message and
+nothing more after that.  If instead you choose to gather all input first
+before checking for any errors, and you detect more than one error, then
+after writing the line of three hyphens, write only the error message for
+the earliest erroneous item.
+</p>
+<p>
+You will not write any loops in this program.  This means that each time
+you run the program, it handles only one bus ticket transaction.  It also
+means that in the case of bad input, you must not keep prompting the user
+until you get something acceptable; our grading tool will not recognize
+that you're doing that.
+</p>
+<p>
+A string with no characters in it is the empty string.  A string with at
+least one character in it is not the empty string, even if the only
+characters in it are things like spaces or tabs.  Although realistically
+it would be silly to have a destination name consisting of seventeen
+spaces and nothing more, treat that as you would any other non-empty
+string:  as a valid name.  (Since you don't yet know how to check for that
+kind of situation anyway, we're not requiring you to.)
+</p>
+<p>
+The one kind of input error your program does <strong>not</strong> have to
+deal with is the case of not finding an integer in the input where an integer
+is expected.  Our grading tool will not, for example, supply the text
+<code>Granola Hills</code> or the number <code>23.456</code> when your
+program requests a rider's age.
+</p>
+<p>
+The correctness of your program must not depend on undefined program behavior.
+Your program could not, for example, assume anything about <code>n</code>'s
+value at the point indicated:
+</p>
+<pre>
+	int main()
+	{
+	    int n;
+	    int m = 42 * n;  // n's value is undefined
+	    &hellip;
+</pre>
+<p>
+What you will turn in for this assignment is a zip file containing these
+three files and nothing more:
+</p>
+<ol>
+<li>
+A text file named <strong>fare.cpp</strong> that contains the source
+code for your C++ program.  Your source code should have helpful comments
+that tell the purpose of the major program segments and explain any tricky
+code.
+</li><li>
+A file named <strong>report.docx</strong> or <strong>report.doc</strong>
+(in Microsoft Word format) or <strong>report.txt</strong> (an ordinary
+text file) that contains:
+<ol style="list-style: lower-alpha">
+<li>
+A brief description of notable obstacles you overcame.  (In Project 1, for
+example, some people had the problem of figuring out how to work with more
+than one version of a program in Visual C++.)
+</li><li>
+A list of the test data that could be used to thoroughly test your
+program, along with the reason for each test.  You don't have to include
+the results of the tests, but you must note which test cases your program
+does not handle correctly.  (This could happen if you didn't have time to
+write a complete solution, or if you ran out of time while still debugging
+a supposedly complete solution.)  For Project 1, for example, such a list,
+had it been required, might have started off like this:
+<dl>
+<dt></dt><dd>More surveyed than the total expressing approval and disapproval (1000, 413, 382
+)</dd>
+<dt></dt><dd>Fewer surveyed than the total expressing approval and disapproval (500, 413, 382
+)</dd>
+<dt></dt><dd>Zero people surveyed (0, 100, 100)</dd>
+<dt></dt><dd>Data giving a non-integer percentage (1000, 413, 382)</dd>
+<dt></dt><dd>More expressing approval than disapproval (1000, 413, 382)</dd>
+<dt></dt><dd>Equal numbers expressing approval and disapproval (1000, 500, 500)</dd>
+<dt></dt><dd>&hellip;</dd>
+</dl>
+</li>
+</ol>
+</li><li>
+<a name="hw"></a>
+A file named <strong>hw.docx</strong> or <strong>hw.doc</strong> (in
+Microsoft Word format) or <strong>hw.txt</strong> (an ordinary text file)
+that contains your solution to the <a href="hw.html">homework</a>
+accompanying Project 2.
+</li>
+</ol>
+<p>
+By October 16, there will be links on the class webpage that will enable you
+<!--
+The <a href="../../Submit/submission.cgi?asst=2">turn in Project 2</a>
+link on the class webpage enables you
+-->
+to turn in your zip file electronically.  Turn in the file by the due time
+above.  Give yourself enough time to be sure you can turn something in,
+because we will not accept excuses like "My network connection at home was
+down, and I didn't have a way to copy my files and bring them to a SEASnet
+machine."  There's a lot to be said for turning in a preliminary version
+of your program, report, and homework early (You can always overwrite it
+with a later submission).  That way you have something submitted in case
+there's a problem later.  Notice that most of the test data portion of
+your report can be written from the requirements in this specification,
+before you even start designing your program.
+</p><p>
+The writeup <a href="../../strings.html">Some Things about Strings</a>
+tells you what you need to know about strings for this project.
+</p><p>
+As you develop your program, periodically try it out under another compiler
+(g31 on cs31.seas.ucla.edu if you're doing your primary development using
+Visual C++ or Xcode).  Sometimes one compiler will warn you about
+something that another is silent about, so you may be able to find and fix
+more errors sooner.  If running your program under both environments with
+the same input gives you different results, your program is probably
+relying on undefined behavior (such as using the value of an uninitialized
+variable), which we prohibit.
+</p>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/2/spec.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:09 GMT -->
+</html>

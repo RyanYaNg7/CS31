@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/2/hw.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:25 GMT -->
+<head>
+ <title>CS 31 Homework 2, Fall 2017</title>
+</head>
+<body>
+<div align="right">
+Fall 2017 CS 31 
+</div>
+<div align="center">
+<h2>Homework 2</h2>
+<p>
+<strong>Time due: 11:00 PM Tuesday, October 17</strong>
+</p>
+</div>
+<p>
+Prepare your solutions to these homework problems as a single Word
+document named <strong>hw.docx</strong> or <strong>hw.doc</strong>, or a
+plain text file named <strong>hw.txt</strong>.  Turn in this file as
+described in the <a href="spec.html#hw">Project 2 specification</a>.
+</p>
+<ol>
+<li>
+What is the output produced by the following program segment?  Don't just
+run it &mdash; trace through it and figure it out by hand (which is a skill
+you'll need for the exams).
+<pre>
+	string grendel = "endl";
+	cout &lt;&lt; "endl";
+	cout &lt;&lt; grendel;
+	cout &lt;&lt; endl;
+	cout &lt;&lt; "grendel";
+</pre>
+</li>
+<li>
+Consider the following program:
+<pre>
+	#include &lt;iostream>
+	using namespace std;
+
+	int main()
+	{
+	    int side;
+
+	    cout &lt;&lt; "Enter a number: ";
+	    cin >> side;
+
+	    for (int i = 0; i &lt; side; i++)
+	    {
+		for (int j = i; j >= 0; j--)
+		{
+		    cout &lt;&lt; "#";
+		}
+		cout &lt;&lt; "\n";
+	    }
+	}
+</pre>
+<p>
+In a brief, simple English sentence, state what this program does (e.g. "It
+prints a map of the Lost Angels County bus system.").  Again, figure this
+out by hand.
+</p>
+</li>
+<li>
+<p>
+Copy the program in problem 2 and change it so that for any input number, the
+changed program produces <em>exactly</em> the same output as the original,
+but the changed program uses a while loop instead of a for loop for the
+inner loop.
+</p>
+</li>
+<li>
+<p>
+Copy the program you wrote for problem 3 and change it so that for any
+input number, the changed program produces <em>exactly</em> the same output
+as the original, but uses a do-while loop instead of a for loop for the
+outer loop.  Be careful! (Hint: How does it behave if <code>side</code> is
+not positive?)  You may need to add a little additional code to make sure
+the program behaves identically to the program in problem 3.
+</p>
+</li>
+<li>
+Assume <code>codeSection</code> has been previously declared as an
+<code>int</code> and given as its value the number of a section of the
+<a href="https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=PEN"
+target="_blank">California Penal Code</a>.  Write a switch statement that for
+any value of <code>codeSection</code>, produces exactly the same output as
+the following if statement.
+<pre>
+	if (codeSection == 281)
+		cout &lt;&lt; "bigamy";
+	else if (codeSection == 321  ||  codeSection == 322)
+		cout &lt;&lt; "selling illegal lottery tickets";
+	else if (codeSection == 383)
+		cout &lt;&lt; "selling rancid butter";
+	else if (codeSection == 598)
+		cout &lt;&lt; "wounding a bird in a public cemetery";
+	else
+		cout &lt;&lt; "some other crime";
+</pre>
+</li>
+</ol>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/2/hw.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:25 GMT -->
+</html>

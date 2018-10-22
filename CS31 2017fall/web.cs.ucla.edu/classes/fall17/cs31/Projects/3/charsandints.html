@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/3/charsandints.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:25 GMT -->
+<head>
+ <title>Characters and Integers</title>
+</head>
+<body>
+<div align="right">
+Fall 2017 CS 31 
+</div>
+<div align="center">
+<h2>Characters and Integers</h2>
+</div>
+<p>
+All data in a computer are stored as numbers.  This is true of characters
+like <code>'A'</code>, <code>'@'</code>, <code>'&nbsp;'</code>, and
+<code>'4'</code>.  Every character has a corresponding integer code.  Different
+computers may have different encoding schemes, so the code number
+corresponding to the character <code>'A'</code> may be 65 on some machines and
+193 on others.  The C++ standard does not dictate which encoding scheme a
+system must use.
+</p>
+<p>
+What the C++ standard <em>does</em> dictate is that the code numbers for the
+digit characters <code>'0'</code> through <code>'9'</code> must be contiguous
+and increasing.  In other words, for any particular encoding scheme, there is
+an integer <em>x</em> such that
+</p>
+<ul>
+<li><code>'0'</code> has code number <em>x</em></li>
+<li><code>'1'</code> has code number <em>x+1</em></li>
+<li><code>'2'</code> has code number <em>x+2</em></li>
+<li>&hellip;</li>
+<li><code>'9'</code> has code number <em>x+9</em></li>
+</ul>
+<p>
+For the ASCII encoding scheme, <em>x</em> happens to be 48, while for
+the EBCDIC scheme, it's 240.  However, we should never need to know the
+particular value for <em>x</em>.  Let's see why.
+</p>
+<p>
+C and C++ have the following rules:  If a char is used where a number is
+required, the compiler causes the program to use the code number for that
+character; if a number is used where a char is required, the program uses
+the char corresponding to that code number.  So consider this:
+</p>
+<pre>
+char ch = '0';     // Let's say the code number for '0' is <em>x</em>
+ch++;              // now ch is '1' (<em>x+1</em>)
+ch += 7;           // now ch is '8' (since <em>(x+1)+7</em> is <em>x+8</em>)
+int n = ch;        // n is the code number for '8' (i.e., <em>x+8</em>)
+int m = ch - '3';  //  '8' - '3'
+		   //    which is <em>(x+8) - (x+3)</em>
+		   //    which is 8 - 3
+		   //    so m is 5
+</pre>
+<p>
+Notice that <code>m</code> will be 5 no matter what encoding scheme our
+computer uses (so no matter what value <em>x</em>, the code for
+<code>'0'</code>, is).  If it's ASCII, for example, <code>ch</code> ends up
+as 56 and <code>'3'</code> is 51, and 56 minus 51 is 5.  If it's EBCDIC,
+<code>ch</code> is 248 and <code>'3'</code> is 243, and 248 minus 243 is
+5.  In general, your program should never need to use integer constants
+like 48 to represent a character code; if you want to represent the code
+for the character <code>'0'</code>, for example, just say
+<code>'0'</code>, not <code>48</code>.
+</p>
+<p>
+On another note, why do we interpret the sequence of characters consisting of
+the digit four, the digit seven, and the digit three as the number four hundred seventy-three?  What if someone revealed the digits to you one at a time?
+</p>
+<p>
+"I'm going to show you some digits, and you tell me what number they
+represent.  The first digit is four."<br/>
+"OK, I think the number is four."<br/>
+"The next digit is seven."<br/>
+"Hmmm, I thought the number was four, but there's another digit.  Ten times
+four is forty, plus seven is forty-seven.  I think the number is
+forty-seven."<br/>
+"The next digit is three."<br/>
+"Hmmm, I thought the number was forty-seven, but there's another digit.  Ten
+times forty-seven is four hundred seventy, plus three is four hundred
+seventy-three.  I think the number is four hundred seventy-three."<br/>
+"There are no more digits."<br/>
+"The number is four hundred seventy-three."
+</p>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/3/charsandints.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:25 GMT -->
+</html>

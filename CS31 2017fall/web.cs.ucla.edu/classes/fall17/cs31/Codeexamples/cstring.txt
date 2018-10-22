@@ -1,0 +1,49 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+const int MAXNAMES = 1000;
+const int MAXNAMELEN = 15;
+const int MAXLINELEN = 100;
+
+int tally(const char a[][MAXNAMELEN+1], int n, const char target[]);
+
+int main()
+{
+    char names[MAXNAMES][MAXNAMELEN+1];
+    int nNames = 0;
+    cout << "Enter names, ending with an empty line:" << endl;
+    for (;;)
+    {
+        char s[MAXLINELEN+1];
+        cin.getline(s, MAXLINELEN+1);
+        if (s[0] == '\0')     // or  if (strcmp(s, "") == 0)
+            break;
+        if (strlen(s) > MAXNAMELEN)
+        {
+            cout << "Name must be " << MAXNAMELEN
+                 << " or fewer characters long; ignoring it." << endl;
+            continue;
+        }
+        if (nNames == MAXNAMES)
+        {
+            cout << "Too many names.  Continuing using only the first "
+		 << MAXNAMES << "." << endl;
+            break;
+        }
+        strcpy(names[nNames], s);
+        nNames++;
+    }
+    cout << "UCLA appears " << tally(names, nNames, "UCLA") << " times." << endl;
+}
+
+int tally(const char a[][MAXNAMELEN+1], int n, const char target[])
+{
+    int count = 0;
+    for (int k = 0; k < n; k++)
+    {
+        if (strcmp(a[k], target) == 0)
+            count++;
+    }   
+    return count;
+}

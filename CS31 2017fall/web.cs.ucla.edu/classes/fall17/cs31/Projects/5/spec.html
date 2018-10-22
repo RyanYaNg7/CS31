@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/5/spec.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:40:53 GMT -->
+<head>
+ <title>CS 31 Project 5, Fall 2017</title>
+</head>
+<body>
+<div align="right">
+Fall 2017 CS 31 
+</div>
+<div align="center">
+<h2>Programming Assignment 5<br />
+Star Search</h2>
+<p>
+<strong>Time due: 9:00 PM Monday, November 20</strong>
+</p>
+</div>
+<!--
+<p style="font-size: smaller">
+Before you ask questions about this specification, see if your question has
+already been addressed by the <a href="faq.html">Project 5 FAQ</a>.  And
+read the FAQ before you <a href="../../Submit/submission.cgi?asst=5">turn
+in this project</a>, to be sure you didn't misinterpret anything.
+</p>
+-->
+<p>
+You have been contracted by the producers of the highly-rated Star Search
+game show to write a program that lets fans play a home version of the
+game.  Here's how one round of the game works:  The computer picks a secret
+word of four to six letters and tells the player how many letters are in the
+word.  The player tries to determine the secret word by presenting
+the computer with a series of probe words.  Each probe word is a four to six
+letter word.  If the probe word is the secret word, the player wins.
+Otherwise, the computer responds to the probe word with two integers:  the
+number of stars and the number of planets.  Stars and planets are pairings 
+between a letter in the probe word and the same letter in the secret word.
+A <em>star</em> is a pairing of a letter in the probe word and the same letter
+in the secret word in the same position.  A <em>planet</em> is a pairing
+between a letter in the probe word and the same letter in the secret word,
+but <em>not</em> in the same position as in the probe word, provided that
+neither of the two letters are involved in a star or another planet.  The
+player's score for each round is the number of probe words needed to get
+the correct word (counting the probe word that matched the secret word).
+</p><p>
+(The terms <em>star</em> and <em>planet</em> come from the astronomical
+objects; stars have a fixed position in the sky relative to other stars,
+while planets appear to wander relative to the stars.)
+</p><p>
+As an example, suppose the secret word is EGRET.  Here are some examples of
+the star and planet counts for various probe words:
+</p>
+<pre>
+
+	EGRET        EGRET        EGRET        EGRET
+	GOOSE        RAGE         EERIE        EERIE
+	p   p        p ps         sps     or   s s p
+      0 s / 2 p    1 s / 2 p    2 s / 1 p    2 s / 1 p
+ 
+	EGRET        EGRET        EGRET        EGRET
+	GREET        OKAPI        REGRET  or   REGRET
+	pppss                     ppp pp        ppppp
+      2 s / 3 p    0 s / 0 p    0 s / 5 p    0 s / 5 p
+</pre>
+<p>
+Your program must ask the player how many rounds to play, and then play
+that many rounds of the game.  After each round, the program must display
+some statistics about how well the player has played the rounds so far: 
+the average score, the minimum score, and the maximum score.
+</p><p>
+Here is an example of how the program must interact with the player
+(player input is in <strong>boldface</strong>):
+</p>
+<pre>
+	How many rounds do you want to play? <strong>3</strong>
+
+	Round 1
+	The secret word is 5 letters long.
+	Probe word: <strong>assert</strong>
+	Stars: 1, Planets: 2
+	Probe word: <strong>xyzzy</strong>
+	I don't know that word.
+	Probe word: <strong>bred</strong>
+	Stars: 0, Planets: 2
+	Probe word: <strong>mucus</strong>
+	Stars: 0, Planets: 0
+	Probe word: <strong>never</strong>
+	Stars: 2, Planets: 2
+	Probe word: <strong>enter</strong>
+	Stars: 1, Planets: 2
+	Probe word: <strong>river</strong>
+	Stars: 3, Planets: 0
+	Probe word: <strong>raven</strong>
+	You got it in 7 tries.
+	Average: 7.00, minimum: 7, maximum: 7
+
+	Round 2
+	The secret word is 5 letters long.
+	Probe word: <strong>eerie</strong>
+	Stars: 2, Planets: 1
+	Probe word: <strong>rage</strong>
+	Stars: 1, Planets: 2
+	Probe word: <strong>greet</strong>
+	Stars: 2, Planets: 3
+	Probe word: <strong>egret</strong>
+	You got it in 4 tries.
+	Average: 5.50, minimum: 4, maximum: 7
+
+	Round 3
+	The secret word is 4 letters long.
+	Probe word: <strong>monkey</strong>
+	Stars: 0, Planets: 0
+	Probe word: <strong>puma</strong>
+	Stars: 0, Planets: 0
+	Probe word: <strong>Hello</strong>
+	Your probe word must be a word of 4 to 6 lower case letters.
+	Probe word: <strong>what?</strong>
+	Your probe word must be a word of 4 to 6 lower case letters.
+	Probe word: <strong>wrap-up</strong>
+	Your probe word must be a word of 4 to 6 lower case letters.
+	Probe word: <strong>stop it</strong>
+	Your probe word must be a word of 4 to 6 lower case letters.
+	Probe word: <strong>sigh</strong>
+	You got it in 3 tries.
+	Average: 4.67, minimum: 3, maximum: 7
+</pre>
+<p>
+Notice that unknown words and probe strings that don't consist of exactly 4 to
+6 lower case letters don't count toward the number of tries for a round.
+</p><p>
+You can assume the player will always enter an integer for the number of rounds
+(since you haven't learned a clean way to check that yet).  If the number of
+rounds entered is not positive, write the message
+</p>
+<pre>
+	The number of rounds must be positive.
+</pre>
+<p>
+(not preceded by an empty line) and terminate the program immediately.
+</p><p>
+The program will be divided across three files:  <code>stars.cpp</code>, which
+you will write; <a href="utilities.h"><code>utilities.h</code></a>, which we
+have written and which you must not change; and
+<a href="utilities.cpp"><code>utilities.cpp</code></a>, which we have written
+and you must not change.  You will turn in only <code>stars.cpp</code>;
+when we test your program, our test framework will supply
+<code>utilities.h</code> and our own special testing version of
+<code>utilities.cpp</code>.
+</p><p>
+In order for us to thoroughly test your program, it must have at least the
+following components:
+</p>
+<ul>
+<li>
+<p>In <code>stars.cpp</code>, a main routine that declares an array of C
+strings.  This array exists to hold the list of words from which the
+secret word will be selected.  The response to a probe word will be the
+number of stars and planets only if the probe word is in this array. (From
+the example transcript above, we deduce that "xyzzy" is not in the array.)
+The declared number of C strings in the array must be at least 9000. 
+(You can declare it to be larger if you like, and you don't have to use
+every element.)
+</p><p>
+Each element of the array must be capable of holding a C string of
+length up to 6 letters (thus 7 characters counting the zero byte).  So a
+declaration such as <code>char wordList[9000][7];</code> is fine, although
+something like <code>char wordList[MAXWORDS][MAXWORDLEN+1];</code>, with the
+constants suitably defined, would be stylistically better.
+</p><p>
+Along with the array, your main routine must declare an int that will
+contain the actual number of words in the array (i.e., elements 0 through
+one less than that number are the elements that contain the C strings of
+interest).  The number may well be smaller than the declared size of the array,
+because for test purposes you may not want to fill the entire array.
+</p><p>
+Before prompting the player for the number of rounds to play, your main
+routine must call <code>getWords</code> (see below) to fill the array.
+The only valid words in the game will be those that <code>getWords</code>
+puts into this array.
+</p><p>
+If the player's score for a round is not 1, the message reporting the score
+must be
+</p>
+<pre>
+	You got it in <em>n</em> tries.
+</pre>
+where <em>n</em> is the score.  If the score is 1, the message must be
+</p>
+<pre>
+	You got it in 1 try.
+</pre>
+</li>
+<li>
+<p>
+In <code>utilities.cpp</code>, a function named <code>getWords</code>
+with the following prototype: </p>
+<pre>
+	int getWords(char words[][7], int maxWords, const char wordfilename[]);
+</pre>
+<p>
+(Instead of <code>7</code>, you can use something like
+<code>MAXWORDLEN+1</code>, where <code>MAXWORDLEN</code> is declared
+to be the constant 6, as in <code>utilities.h</code>.)  This function puts
+words into the <code>words</code> array and returns the number of words
+put into the array.  The array must be able to hold at least
+<code>maxWords</code> words.  The file named by the third argument is the
+plain text file that contains the words, one per line, that will be put into
+the array.
+</p><p>
+You <em>must</em> call <code>getWords</code> exactly once, before you
+start playing any of the rounds of the game.  If your main routine
+declares <code>wordList</code> to be an array of 10000 C strings and
+<code>nWords</code> to be an int, you'll probably invoke this
+function like this:
+</p>
+<pre>
+	const char WORDFILENAME[] = "<em>the path for the word file</em>";
+	...
+	int nWords = getWords(wordList, 10000, WORDFILENAME);
+</pre>
+<p>
+You may use <a href="words.txt">this 7265-word file</a> if you want a
+challenging game.  Here's how you'd specify the path to the word file for
+various systems:
+</p>
+<ul>
+<li>
+Windows:  Provide a path for the filename, but use / in the string instead
+of the \ that Windows paths use, e.g. <code>"Z:CS31/P5/mywordfile.txt"</code>.
+</li><li>
+Mac:  It's probably easiest to use the complete pathname to the words
+file, e.g. <code>"/Users/<em>yourUsername</em>/words.txt</code>" or
+<code>"/Users/<em>yourUsername</em>/CS31/P5/words.txt"</code>.
+</li><li>
+Linux:  If you put the words.txt file in the same directory as your .cpp
+file, you can use <code>"words.txt"</code> as the file name string.
+</li>
+</ul>
+<p>
+We have given you an implementation of <code>getWords</code></a>.  (Don't
+worry if you don't understand every part of the implementation.) It fills
+the array with the four-to-six-letter words found in the file named as its
+third argument.  To do simple testing, you can <em>temporarily</em> change the
+implementation of <code>getWords</code> to something like this that
+ignores the file name and hard codes a small number of words to be put in
+the array:
+</p>
+<pre>
+	int getWords(char words[][7], int maxWords, const char wordfilename[])
+	{
+	    if (maxWords < 2)
+	        return 0;
+	    strcpy(words[0], "eagle");
+	    strcpy(words[1], "goose");
+	    return 2;
+	}
+</pre>
+<p>
+Whatever implementation of <code>getWords</code> you use, each C string that
+it puts into the array must consist of four to six lower case letters; the
+C strings must not contain any characters that aren't lower case letters.
+If you have made a temporary change to <code>getWords</code> for test
+purposes, be sure to restore <code>utilities.cpp</code> back to its
+original state and verify that your program still runs correctly.
+</p><p>
+The <code>getWords</code> function must return an int no greater than
+<code>maxWords</code>.  If it returns a value less than 1, your main
+routine must write
+</p>
+<pre>
+	No words were loaded, so I can't play the game.
+</pre>
+<p>
+to <code>cout</code> and terminate the program immediately, without asking
+the player for the number of rounds to play, etc.
+</p><p>
+When we test your program, we will replace <code>utilities.cpp</code> (and
+thus any changed implementation of <code>getWords</code> you might have made)
+with our own special testing implementation that will ignore the third argument
+and fill the array with the test words we want to use.
+</p><p>
+If <code>getWords</code> returns a value in the range from 1 to
+<code>maxWords</code> inclusive, your program must write no output to
+<code>cout</code> other than what is required by this spec.  If you want to
+print things out for debugging purposes, write to <code>cerr</code>
+instead of <code>cout</code>.  When we test your program, we will cause
+everything written to <code>cerr</code> to be discarded instead &mdash; we
+will never see that output, so you may leave those debugging output
+statements in your program if you wish.
+</p>
+</li>
+<li>
+In <code>stars.cpp</code>, a function named <code>runOneRound</code>
+with the following prototype: <pre>
+	int runOneRound(const char words[][7], int nWords, int wordnum);
+</pre>
+<p>
+(Again, instead of <code>7</code>, you can use something like
+<code>MAXWORDLEN+1</code>.)  Using <code>words[wordnum]</code> as the
+secret word, this function plays one round of the game.  It returns the
+score for that round.  In the transcript above, for round 1, for example,
+this function is responsible for this much of the round 1 output, no more,
+no less:
+</p>
+<pre>
+        Probe word: <strong>assert</strong>
+        Stars: 1, Planets: 2
+        Probe word: <strong>xyzzy</strong>
+        I don't know that word.
+        Probe word: <strong>bred</strong>
+        Stars: 0, Planets: 2
+        Probe word: <strong>mucus</strong>
+        Stars: 0, Planets: 0
+        Probe word: <strong>never</strong>
+        Stars: 2, Planets: 2
+        Probe word: <strong>enter</strong>
+        Stars: 1, Planets: 2
+        Probe word: <strong>river</strong>
+        Stars: 3, Planets: 0
+        Probe word: <strong>raven</strong>
+</pre>
+<p>
+Your program must call this function to play each round of the game.  Notice
+that this function does <em>not</em> select a random number and does
+<em>not</em> tell the user the length of the secret word; the
+<em>caller</em> of this function does, and passes the random number as the
+third argument.  Notice also that this function does <em>not</em> write
+the message about the player successfully determining the secret word. 
+<strong>If you do not observe these requirements, your program will fail
+most test cases.</strong>
+</p><p>
+The parameter <code>nWords</code> represents the number of words in the array;
+if it is not positive, or if <code>wordnum</code> is less than 0 or greater
+than or equal to <code>nWords</code>, then <code>runOneRound</code>
+must return &minus;1 without writing anything to <code>cout</code>.
+</p><p>
+If for a probe word the player enters a string that does not contain four
+to six lower case letters or contains any character that is not a lower case
+letter, the response must be
+</p>
+<pre>
+	Your probe word must be a word of 4 to 6 lower case letters.
+</pre>
+<p>
+If the player enters a string consisting of exactly four to six lower case
+letters, but that string is not one of the words in the array of valid
+words, then the response must be
+</p>
+<pre>
+	I don't know that word.
+</pre>
+</li>
+</ul>
+<p>
+To make things interesting, your program must pick secret words at random
+using the function <code>randInt</code>, contained in
+<code>utilities.cpp</code>:
+</p>
+<pre>
+	int randInt(int min, int max);
+</pre>
+<p>
+Every call to <code>randInt</code> returns a random integer between min
+and max, inclusive.  If you use it to generate a random position in an
+array of <code>n</code> interesting items, you should invoke it as
+<code>randInt(0, n-1)</code>, not <code>randInt(0, n)</code>, since the
+latter might return <code>n</code>, which is not a valid position in an
+<code>n</code>-element array.
+</p><p>
+<strong>Your program must <strong>not</strong> use any <code>std::string</code>
+objects (C++ strings); you must use C strings.</strong>
+</p><p>
+You may assume (i.e., we promise when testing your program) that any line
+entered in response to the probe word prompt will contain fewer than 100
+characters (not counting the newline at the end).
+</p><p>
+Your program must <strong>not</strong> use any global variables whose values
+may change during execution.  Global <em>constants</em> are all right;
+it's perfectly fine to declare <code>const int MINWORDLEN = 4;</code>
+globally, for example.  The reason for this restriction is that part of
+our testing will involve replacing your <code>runOneRound</code>
+function with ours to test some aspects of your <code>main</code>
+function, or replacing your <code>main</code> with ours to test aspects of
+your <code>runOneRound</code>.  For this reason, you must not use any
+non-const global variables to communicate between these functions, because
+our versions won't know about them; all communication between these
+functions must be through the parameters (for <code>main</code> to tell
+<code>runOneRound</code> the words, number of words, and secret word
+number for a round), and the return value (for <code>runOneRound</code>
+to tell <code>main</code> the score for that round).  Global <em>constants</em>
+are OK because no function can change their value in order to use them to
+pass information to another function.
+</p><p>
+Microsoft made a controversial decision to issue by default an error or warning
+when using certain functions from the standard C and C++ libraries (e.g.,
+<code>strcpy</code>).  These warnings call that function unsafe and
+recommend using a different function in its place; that function, though, is
+not a Standard C++ function, so will cause a compilation failure when you try
+to build your program under clang++ or g++.  Therefore, for this class, we do
+not want get that error or warning from Visual C++; to eliminate them, put
+the following line in your program <em>before</em> any of your
+<code>#include</code>s:
+</p>
+<pre>
+	#define _CRT_SECURE_NO_DEPRECATE
+</pre>
+</p><p>
+It is OK and harmless to leave that line in when you build your program
+using clang++ or g++.
+</p><p>
+What you will turn in for this assignment is a zip file containing these
+two files and nothing more:
+</p>
+<ol>
+<li>
+<p>
+A text file named <strong>stars.cpp</strong> that contains <code>main</code>,
+<code>runOneRound</code>, and other functions you choose to write that
+they might call.  (You must <em>not</em> put implementations of
+<code>getWords</code> or <code>randInt</code> in <code>stars.cpp</code>;
+they belong in <code>utilities.cpp</code>.)  Your source code should have
+helpful comments that tell the purpose of the major program segments and
+explain any tricky code.
+</p>
+</li>
+<li>A file named <strong>report.docx</strong> or <strong>report.doc</strong>
+(in Microsoft Word format), or <strong>report.txt</strong> (an ordinary text
+file) that contains:
+<ol style="list-style: lower-alpha">
+<li>A brief description of notable obstacles you overcame.
+</li>
+<li>A description of the design of your program.  You should use
+<a href="../../pseudocode.html">pseudocode</a> in this description where it
+clarifies the presentation.  Document the design of your main routine and
+any functions you write.  Do not document the <code>getWords</code> or
+<code>randInt</code> functions.
+</li>
+</ol>
+Your report does not need to describe the data you might use to test this
+program.
+</li>
+</ol>
+<p>
+By November 19, there will be links on the class webpage that will enable you
+<!--
+The <a href="../../Submit/submission.cgi?asst=5">turn in Project 5</a> link
+on the class webpage enables you
+-->
+to turn in your zip file electronically.  Turn in the file by the due time
+above.
+</p>
+<h3>Getting started</h3>
+<p>
+This project is having you do two things we haven't done before:  set up a
+project with multiple source files and run a program that reads from a file.
+Before you delve into the details of writing the code to play the game, you
+would be wise to ensure that you can do these two new things correctly.  We
+will first have you set up a file with a couple of words in it that your
+test program will read.  Then you will set up a project and run the program
+to read the file.
+</p><p>
+First, place <a href="smallwords.txt">this two-word file</a> at a location of
+your choosing.  On a Windows or Mac system, make sure you know the complete
+path name to the file (e.g., <code>Z:CS31\P5\mywordfile.txt</code> or
+<code>C:\Temp\smallwords.txt</code> on a Windows system, or 
+<code>/Users/<em>yourUsername</em>/CS31/P5/smallwords.txt</code> on a Mac).
+Then, follow the instructions below for the compiler you'll be using.  For the
+text of the <code>stars.cpp</code> file, use this:
+</p>
+<pre>
+	#include "utilities.h"
+	#include &lt;iostream>
+	using namespace std;
+
+	const char WORDFILENAME[] = "<em>the path to your file of words</em>";
+
+	int main()
+	{
+	    char w[9000][7];
+	    int n = getWords(w, 9000, WORDFILENAME);
+	    if (n == 2)
+	    {
+		cout &lt;&lt; "getWords successfully found the file and read its two words." &lt;&lt; endl;
+		cout &lt;&lt; "You're ready to start working on Project 5." &lt;&lt; endl;
+	    }
+	    else if (n == -1)
+		cout &lt;&lt; "The path to your file of words is probably incorrect" &lt;&lt; endl;
+	    else
+		cout &lt;&lt; "getWords found the file, but loaded " &lt;&lt; n
+                     &lt;&lt; " words instead of 2" &lt;&lt; endl;
+	}
+</pre>
+</p>
+<h3>Setting up a multi-file Visual C++ project</h3>
+Follow these steps to set up a Visual C++ project to compile and run a
+three-file program.  A number of these steps may have alternate ways to
+achieve the same end.
+</p>
+<ol>
+<li><p>
+Follow steps 1 through 4 in the <a href="../../visualcpp.html">Visual C++
+2017</a> writeup to create an empty Visual C++ project.
+</p></li>
+<li><p>
+From the Project menu, select Add New Item.  In the Add New Item dialog,
+select C++ file (.cpp) in the middle panel.  Enter the source file name
+<code>stars</code>, in the Name text box below.  Click Add.
+</p>
+</li>
+<li><p>
+Edit the <code>stars.cpp</code> file in the window that appears.  Insert the
+code in the Getting started section.  For the initializer for
+<code>WORDFILENAME</code>, replace any \ in the pathname to your words
+file with / (e.g., use <code>"Z:CS31/P5/mywordfile.txt"</code> or
+<code>/Temp/smallwords.txt"</code>).
+</p>
+</li>
+<li><p>
+From the Project menu, select Add New Item.  This time, in the Add New
+Item dialog, select Header file (.h) in the middle panel and enter the
+header file name <code>utilities</code> in the Name text box below.  Copy
+and paste <a href="utilities.h">our utilities.h</a> into the
+<code>utilities.h</code> file that appears.
+</p>
+</li>
+<li><p>
+From the Project menu, select Add New Item.  This last time, select C++
+file (.cpp) in the middle panel, and enter the source file name
+<code>utilities</code> in the Name text box below.  Copy and paste
+<a href="utilities.cpp">our utilities.cpp</a> into the
+<code>utilities.cpp</code> file that appears.
+</p></li>
+<li><p>
+From the Debug menu, select Start Without Debugging.  This will save any
+changed files, compile the source files, and run the resulting executable
+if there were no build errors.  (If you select Start Debugging, your
+console window screen will disappear as soon as your program finishes
+executing, which you don't want.)
+</p></li>
+</ol>
+<h3>Setting up a multi-file Xcode project</h3>
+<p>
+Follow these steps to set up an Xcode project to compile and run a
+three-file program.  A number of these steps may have alternate ways to
+achieve the same end.
+</p>
+<ol>
+<li><p>
+Follow steps 1 through 4 in the <a href="../../xcode.html">Xcode on a Mac</a>
+writeup to create a project.  Use <code>stars</code> as the project name
+instead of <code>hello</code>.
+</p></li>
+<li><p>
+In the left frame, click once on the name <code>main.cpp</code> to open
+the file.  Click once again on the name to rename the file to
+<code>stars.cpp</code>.  Once you've clicked outside the text box to
+effect the name change, replace the code that Xcode supplied with the code
+in the Getting started section.  For the initializer for
+<code>WORDFILENAME</code>, use the pathname to your words file (e.g.
+<code>/Users/<em>yourUsername</em>/CS31/P5/smallwords.txt</code>).
+</p></li>
+<li><p>
+In the left frame, right click on the yellow folder icon labelled "stars".
+In the popup menu, select New File.  Select the macOS tab, and in the Source group,
+select C++ File.  Click Next.  Use <code>utilities</code> for the name
+and leave the box checked for also creating a header file.  Click Next.  
+A save file dialog appears; click Create.  Rename the file that was created
+named <code>utilities.hpp</code> to be named <code>utilities.h</code>.
+Replace the code in <code>utilities.h</code>  with
+<a href="utilities.h">our utilities.h</a>.  Replace the code in
+<code>utilities.cpp</code> with <a href="utilities.cpp">our utilities.cpp</a>.
+</p></li>
+<li><p>
+Follow steps 6 through 9 in the <a href="../../xcode.html">Xcode on a Mac</a>
+writeup to build and run your program.
+</p></li>
+</ol>
+<h3>Running the project using g++ with Linux</h3>
+<p>
+To take a three-file project you've developed with Visual C++ or Xcode and
+run it with g++ under Linux, follow these steps.
+</p>
+<ol>
+<li><p>
+Follow steps 1 through 3 of the <a href="linux.html">g++ with Linux</a>
+writeup to transfer the three files (<code>utilities.h</code>,
+<code>utilities.cpp</code>, and <code>stars.cpp</code>) to the Windows
+desktop on a SEASnet machine and to log in to <code>cs31.seas.ucla.edu</code>.
+</p></li>
+<li><p>
+Create a new directory for this project; let's call it <code>proj5</code>:
+</p>
+<pre>
+	mkdir proj5
+</pre>
+</li>
+<li><p>
+Copy the files from the Desktop to this directory:
+</p>
+<pre>
+	cp Desktop/utilities.* Desktop/stars.cpp proj5
+</pre>
+</li>
+<li><p>
+Make <code>proj5</code> the <em>current directory</em> (i.e., the default
+directory for now in which files will be found or created):
+</p>
+<pre>
+	cd proj5
+</pre>
+</li>
+<li><p>
+Verify that the expected three files are present by listing the contents of
+the current directory:
+</p>
+<pre>
+	ls
+</pre>
+</li>
+<li><p>
+Copy over the two-word word file into the current directory:
+</p>
+<pre>
+	curl -s -L http://cs.ucla.edu/classes/fall17/cs31/Projects/5/smallwords.txt > twowords.txt
+</pre>
+</li>
+<li><p>
+Use the Nano editor to change the initializer for <code>WORDFILENAME</code> to
+<code>"twowords.txt"</code>.
+<pre>
+	nano stars.cpp
+</pre>
+<p>
+You can navigate with the arrow keys.  The bottom two lines of the display
+show you some commands you can type.  For example, control-O (indicated in
+the bottom display as <code>^O</code>) saves any changes you make to the
+file, and control-X exits the editor.
+</p>
+</li>
+<li><p>
+Build an executable file from the source files.  If we would like the
+executable file to be named <code>teststars</code>, we'd say
+</p>
+<pre>
+	g31 -o teststars *.cpp
+</pre>
+<p>
+The <code>*.cpp</code> saves us typing individual file names by matching all
+the files whose names end in <code>.cpp</code>.  (Notice that we do not list
+the .h file.).
+</p>
+</li>
+<li><p>
+To execute the program <code>teststars</code> that you built, you'd just say
+</p>
+<pre>
+	teststars
+</pre>
+<p>
+(If that doesn't work, try <code>./teststars</code>)
+</p></li>
+</ol>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/5/spec.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:03 GMT -->
+</html>

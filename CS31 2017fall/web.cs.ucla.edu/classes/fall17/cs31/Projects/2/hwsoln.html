@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/2/hwsoln.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:07 GMT -->
+<head>
+ <title>CS 31 Homework 2 Solutions, Fall 2017</title>
+</head>
+<body>
+<div align="right">
+Fall 2017 CS 31 
+</div>
+<div align="center">
+<h2>Homework 2 Solution</h2>
+</div>
+<ol>
+<li>
+<pre>
+endlendl
+<a href="http://www.amazon.com/exec/obidos/tg/detail/-/0679723110" target="_blank">grendel</a>
+</pre>
+</li>
+<li>
+<p>
+It prints a triangle.  <em>[The problem said to write a brief, simple
+English sentence; we did not want a paragraph-length blow-by-blow account
+of what the program was doing.]</em>
+</p>
+</li>
+<li>
+<pre>
+#include &lt;iostream>
+using namespace std;
+
+int main()
+{
+    int side;
+
+    cout &lt;&lt; "Enter a number: ";
+    cin >> side;
+
+    for (int i = 0; i &lt; side; i++)
+    {
+	int j = i;
+	while (j >= 0)
+	{
+	    cout &lt;&lt; '#';
+	    j--;
+	}
+	cout &lt;&lt; "\n";
+    }
+}
+</pre>
+</li>
+<li>
+<pre>
+#include &lt;iostream>
+using namespace std;
+
+int main()
+{
+    int side;
+
+    cout &lt;&lt; "Enter a number: ";
+    cin >> side;
+
+    if (side > 0)
+    {
+	int i = 0;
+	do
+	{
+	    int j = i;
+	    while (j >= 0)
+	    {
+		cout &lt;&lt; '#';
+		j--;
+	    }
+	    cout &lt;&lt; "\n";
+	    i++;
+	} while (i &lt; side);
+    }
+}
+</pre>
+</li>
+<li>
+<pre>
+switch (codeSection)
+{
+  case 281:
+    cout &lt;&lt; "bigamy";
+    break;
+
+  case 321:
+  case 322:
+    cout &lt;&lt; "selling illegal lottery tickets";
+    break;
+
+  case 383:
+    cout &lt;&lt; "selling rancid butter";
+    break;
+
+  case 598:
+    cout &lt;&lt; "wounding a bird in a public cemetery";
+    break;
+
+  default:
+    cout &lt;&lt; "some other crime";
+}
+</pre>
+</li>
+</ol>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/2/hwsoln.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:07 GMT -->
+</html>

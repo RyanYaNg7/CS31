@@ -1,0 +1,87 @@
+// Class declaration for Target
+
+class Target
+{
+  public:
+    Target();
+    bool move(char dir);
+    int position() const;
+    void replayHistory() const;
+  private:
+      // Invariant:
+      //   history consists only of Rs and Ls
+      //   pos == # of Rs in history minus # of Ls in history
+    int pos;
+    string history;
+};
+
+// Implementations of Target's member functions
+
+Target::Target()
+{
+    pos = 0;
+    history = "";
+}
+
+bool Target::move(char dir)
+{
+    switch (dir)
+    {
+      case 'R':
+      case 'r':
+        pos++;
+        break;
+      case 'L':
+      case 'l':
+        pos--;
+        break;
+      default:
+        return false;
+    }
+    history += toupper(dir);
+    return true;
+}
+
+int Target::position() const
+{
+    return pos;
+}
+
+void Target::replayHistory() const
+{
+    for (int k = 0; k != history.size(); k++)
+        cout << history[k] << endl;
+}
+
+
+  // Implementations of some ordinary non-member functions
+
+void repeatMove(Target& x, int nTimes, char dir)
+{
+    for (int k = 1; k <= nTimes; k++)
+        x.move(dir);
+}
+
+void report(const Target& x)
+{
+    cout << "There's a target at position " << x.position() << endl;
+}
+
+int main()
+{
+    Target t;
+    t.move('R');
+    t.move('R');
+    t.move('L');
+    cout << t.position() << endl;  //  writes  1
+    t.replayHistory();
+
+    Target t2;
+    t2.move('L');
+
+    Target ta[3];
+    ta[0].move('L');
+    ta[1].move('R');
+    repeatMove(ta[2], 5, 'R');
+    report(ta[2]);  //  writes  There's a target at position 5
+}

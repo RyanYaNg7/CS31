@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/3/stringexample.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:25 GMT -->
+<head>
+ <title>String Processing</title>
+</head>
+<body>
+<div align="right">
+Fall 2017 CS 31 
+</div>
+<div align="center">
+<h2>String Processing</h2>
+</div>
+<p>
+Here is an example of a technique for processing a string that can be adapted
+for use in Project 3.
+</p>
+<p>
+A service for tourists to a city provides self-guided walking tours that visit
+points of interest that the tourist selects from a list.  If the tourist
+wants to visit points B, F, and H (the points are coded by capital letters),
+the service prints a set of instructions (e.g., "Turn right and proceed
+for 10 blocks.  Stop at point of interest F.")  The code that takes the
+requested points and determines an optimal route has already been written,
+but it produces a route in coded form; our job is to write a function that
+takes the coded string and prints human-readable instructions.
+</p>
+<p>
+A coded string looks something like this:  <code>10R3LSH12L5RSB3RSF</code>.
+It is a sequence of steps, where each step takes one of three forms, with
+an associated meaning
+</p>
+<dl>
+<dt><code><em>integer</em>R</code></dt><dd>Turn right and proceed for
+<em>integer</em> blocks</dt>
+<dt><code><em>integer</em>L</code></dt><dd>Turn left and proceed for
+<em>integer</em> blocks</dt>
+<dt><code>S<em>letter</em></code></dt><dd>Stop at point of interest <em>letter</em></dt>
+</dl>
+<p>
+The function that we are to write has the following prototype:
+</p>
+<pre>
+	bool translateInstructionString(string text);
+</pre>
+<p>
+For each step in the argument string, the function writes a human-readable
+instruction.  As an example, for the step <code>10R</code>, the function writes
+<code>Turn right and proceed for 10 blocks.</code>  If it encounters no errors
+in the string, it returns true when it's done; otherwise, it does not finish
+processing the string and returns false, possibly after having printed some
+instructions before the point where it encountered the error.  For example,
+if the function is called with the argument <code>10R3LSH12L5RSB3RSF</code>,
+it prints the following and returns true:
+</p>
+<pre>
+	Turn right and proceed for 10 blocks.
+	Turn left and proceed for 3 blocks.
+	Stop at point of interest H.
+	Turn left and proceed for 12 blocks.
+	Turn right and proceed for 5 blocks.
+	Stop at point of interest B.
+	Turn right and proceed for 3 blocks.
+	Stop at point of interest F.
+</pre>
+<p>
+Our solution strategy will be to visit the steps of the string from left to
+right.  Pictorially, we'd start like this:
+</p>
+<pre>
+	10R3LSH12L5RSB3RSF
+	^
+</pre>
+<p>
+Examining the indicated character, we see it's a digit.  We'll call a function
+to process an <code>R</code> or <code>L</code> step, which looks for a 
+sequence of digits followed by the letter, writes the human-readable
+"Turn right"  or "Turn left" instruction, and advances the position in the
+string, resulting in
+</p>
+<pre>
+	10R3LSH12L5RSB3RSF
+	   ^
+</pre>
+<p>
+We examine the indicated character, process the <code>3L</code> step, and
+advance the position, resulting in
+</p>
+<pre>
+	10R3LSH12L5RSB3RSF
+	     ^
+</pre>
+<p>
+Continuing in this manner, we eventually reach
+</p>
+<pre>
+	10R3LSH12L5RSB3RSF
+	                ^
+</pre>
+<p>
+We examine the indicated character, process the <code>SF</code> step, and
+advance the position, resulting in
+</p>
+<pre>
+	10R3LSH12L5RSB3RSF
+	                  ^
+</pre>
+<p>
+Since we've reached the end of the string, we're done; since we didn't
+encounter any error, we return true.
+</p>
+<p>
+The functions to process the various kinds of steps need the coded string and
+the current position in the string; when they return, they need to let their
+caller know the position in the string just after the step.  Also, they may
+encounter an error (e.g., digits not followed by <code>R</code> or
+<code>L</code>), so they need to indicate that as well.  One design is this:
+</p>
+<pre>
+	bool processRorLstep(string text, int&amp; pos);
+</pre>
+<p>
+If this function is called with the example string we've been using and a
+integer variable <code>k</code> whose value is 7, representing the following
+situation:
+</p>
+<pre>
+                  11111111
+        012345678901234567
+
+	10R3LSH12L5RSB3RSF
+	       ^
+</pre>
+<p>
+the function should write "Turn left and proceed for 12 blocks.", set
+<code>k</code> to 10, and return true.  (Because <code>k</code> is passed by
+reference, since the parameter was declared to be of type <code>int&amp;</code>
+instead of <code>int</code>, the function can change <code>k</code>.)  Setting
+<code>k</code> to 10 indicates this:
+</p>
+<pre>
+                  11111111
+        012345678901234567
+
+	10R3LSH12L5RSB3RSF
+	          ^
+</pre>
+<p>
+If the function encounters an error (no <code>R</code> or <code>L</code> after
+the digits), it should return false.
+</p>
+<p>
+Here then is our initial version of <code>translateInstructionString</code>:
+</p>
+<pre>
+	bool translateInstructionString(string text)  // not the final version
+	{
+	    int k = 0;
+	    while (k != text.size())
+	    {
+	          // Decide what to do based on start of instruction
+
+	        if (isdigit(text[k]))
+	        {
+	              // Process R or L step, but if it detects an error,
+	              // we're done
+	            if (!processRorLstep(text, k))
+	                return false;
+	        }
+	        else if (text[k] == 'S')
+		{
+	            if (!processSstep(text, k))
+	                return false;
+		}
+		else
+		{
+	              // Not an R, L, or S step, so error
+	            return false;
+	        }
+	    }
+
+	      // We got through the whole text without error
+
+	    return true;
+	}
+</pre>
+<p>
+The easiest function to implement next is <code>processSstep</code>:
+</p>
+<pre>
+	bool processSstep(string text, int&amp; pos)
+	{
+	      // When this function is called we know text[pos] is 'S',
+	      // so advance to the next position
+
+	    pos++;
+
+	      // If there is no character after the S, error
+
+	    if (pos == text.size())
+	        return false;
+
+	      // Points of interest are indicated by upper case letters
+
+	    if (!isupper(text[pos]))
+	        return false;
+
+	      // Everything's OK.  Write message and advance position
+
+	    cout &lt;&lt; "Stop at point of interest " &lt;&lt; text[pos] &lt;&lt; "." &lt;&lt; endl;
+	    pos++;
+	    return true;
+	}
+</pre>
+<p>
+Here is <code>processRorLstep</code>:
+</p>
+<pre>
+	bool processRorLstep(string text, int&amp; pos)
+	{
+	      // Get distance.  We know text[pos] is a digit
+
+	    string distance = "";
+	    do
+	    {
+	        distance += text[pos];
+	        pos++;
+	    } while (pos != text.size()  &amp;&amp;  isdigit(text[pos]));
+
+	      // We're past the digits, so check direction
+
+	    if (pos == text.size()  ||  (text[pos] != 'R'  &amp;&amp;  text[pos] != 'L'))
+	        return false;
+
+	      // Everything's OK.  Write message
+
+	    cout &lt;&lt; "Turn ";
+	    if (text[pos] == 'R')
+	        cout &lt;&lt; "right";
+	    else
+	        cout &lt;&lt; "left";
+	    cout &lt;&lt; " and proceed for " &lt;&lt; distance &lt;&lt; "blocks." &lt;&lt; endl;
+
+	      // Advance position
+
+	    pos++;
+	    return true;
+	}
+</pre>
+<p>
+Here's one way to test our code:
+</p>
+<pre>
+	int main()
+	{
+	    for (;;)
+	    {
+	        cout &lt;&lt; "Enter coded string (or just hit Enter to quit): ";
+	        string coded;
+	        getline(cin, coded);
+		if (coded == "")
+	            break;
+	        if (!translateInstructionString(coded))
+	            cout &lt;&lt; "  *** There is an error in the string! ***" &lt;&lt; endl;
+	    }
+	}
+</pre>
+</body>
+
+<!-- Mirrored from web.cs.ucla.edu/classes/fall17/cs31/Projects/3/stringexample.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Nov 2017 00:41:25 GMT -->
+</html>
